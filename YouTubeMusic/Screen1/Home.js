@@ -11,14 +11,15 @@ import {
 function MyComponent(props) {
     return (
         <View style={styles.view1}>
-            <View style={styles.view4}>
-                <View style={styles.view5}>
-                    <Text>Song</Text>
-                </View>
-                <View style={styles.view6}>
-                    <Text>Video</Text>
-                </View>
+            <View style = {styles.header}>
+                    <View style={styles.view5}>
+                        <Text>Song</Text>
+                    </View>
+                    <View style={styles.view6}>
+                        <Text>Video</Text>
+                    </View>
             </View>
+            
             <Image
                 resizeMode="contain"
                 source={{
@@ -97,6 +98,19 @@ const styles = StyleSheet.create({
         display: "flex",
         width: '100%',
         flexDirection: "column",
+    },
+    header: {
+        alignSelf: "center",
+        display: "flex",
+        marginTop: 15,
+        width: 156,
+        maxWidth: "100%",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        gap: 20,
+        padding: "0 20px",
+        flexDirection: 'row',
+    
     },
     view2: {
         alignSelf: "center",
