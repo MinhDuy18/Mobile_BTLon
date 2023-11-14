@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import Home from './Screen1/Home';
+import playPage from './Screen1/playPage';
+import listPlay from './Screen1/listPlay';
 
 const Stack = createNativeStackNavigator();
 
@@ -11,8 +12,9 @@ const screenOptions = {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={screenOptions} initialRouteName='Homne'>
-        <Stack.Screen name="Home" component={Home} />
+      <Stack.Navigator screenOptions={screenOptions} initialRouteName='listPlay'>
+        <Stack.Screen name="playPage" component={playPage} />
+        <Stack.Screen name="listPlay" component={listPlay} />
       </Stack.Navigator>
     </NavigationContainer>
   );

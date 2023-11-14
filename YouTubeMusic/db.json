@@ -1,0 +1,15 @@
+{
+  "song": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "name": "Ngày mai người ta lấy chồng",
+      "duration":"6:02",
+      "singer": "Thành Đạt",
+      "image": "https://lh3.googleusercontent.com/YXUb8Reei3riqh9s0xO2m5TE9NF8txl5-mjN0XN0wwbVw-tKxfpd6q0LFJqqWAfpWnMBbtIhykQ_7NM=w544-h544-l90-rj",
+      "mp3": "NGÀY MAI NGƯỜI TA LẤY CHỒNG - THÀNH ĐẠT x ĐÔNG THIÊN ĐỨC _ OFFICIAL MV _ Ngày Hôm Ấy Em Đi Trong Mưa.mp3"
+
+    }
+  ]
+
+}
