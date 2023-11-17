@@ -1,9 +1,38 @@
-import React from 'react';
-import { StyleSheet, Text, View , Image} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View , Image, FlatList, TouchableOpacity} from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { Ionicons } from '@expo/vector-icons'; 
-function listPlay(){
+import axios from 'axios';
+import { Platform } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+const listPlay = ({navigation}) =>{
+        const [data, setData] = useState([]);
+        const [selectedSong, setSelectedSong] = useState(null);
+        useEffect(() => {
+          const fetchData = async () => {
+            try {
+              const response = await axios.get('http://localhost:3000/song');
+              setData(response.data);
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          };
+      
+          fetchData();
+        }, []);
+        useEffect(() => {
+            // Kiểm tra nếu có bài hát được chọn, phát bài hát đó
+            if (selectedSong) {
+              navigation.navigate('playPage', {
+                name: selectedSong.name,
+                singer: selectedSong.singer,
+                image: selectedSong.image,
+                duration: selectedSong.duration,
+                url: selectedSong.mp3,
+              });
+            }
+          }, [selectedSong]);
     return(
         <View style = {styles.container}>
           <View style = {styles.View1}>
@@ -30,7 +59,32 @@ function listPlay(){
                 </View>
                 <Ionicons name="ellipsis-vertical-sharp" size={24} color="#fff" />
           </View>
-           
+           <View>
+                <FlatList data = {data}
+                          keyExtractor={(item) => item.id.toString()}
+                          renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => {
+                                setSelectedSong(item); // Lưu thông tin bài hát được chọn
+                              }}>
+                                     <View style = {styles.song_Style}>
+                                    <Image style = {styles.img_Song_Style} resizeMode='contain' source={item.image}></Image>
+                                    <View>
+                                        <Text style = {styles.name_Song_Style}>{item.name}</Text>
+                                        <View style = {styles.sub_Song}>
+                                            <Text style = {styles.singer_Song_Style}>{item.singer}</Text>
+                                            <Text style = {styles.duration_Song_Style}>{item.duration}</Text>
+                                        </View>
+                                    </View>
+                                    <Ionicons name="ellipsis-vertical-sharp" size={24} color="#fff" />
+                                   
+                            </View>
+                            </TouchableOpacity>
+                           
+                          )}
+                            >
+
+                </FlatList>
+           </View>
         </View>
     )
 }
@@ -39,6 +93,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#000',
+      height: 10000,
       
     },
     View1:{
@@ -110,5 +165,40 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 15,
         fontWeight: 600,
+    },
+    img_Song_Style:{
+        height: 60,
+        width: 60,
+    },
+    song_Style:{
+        width: '100%',
+        height: 80,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    name_Song_Style:{
+        color: '#fff',
+        fontSize: 15,
+        fontWeight: 600,
+        marginLeft: 10,
+        marginTop: 10,
+    },
+    singer_Song_Style:{
+        color: '#FFFFFFB3',
+        fontSize: 15,
+        fontWeight: 600,
+        marginLeft: 10,
+    },
+    duration_Song_Style:{
+        color: '#FFFFFFB3',
+        fontSize: 15,
+        fontWeight: 600,
+        marginLeft: 10,
+    },
+    sub_Song:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '70%',
     }
 })

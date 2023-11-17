@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
     FlatList,
     ScrollView,
@@ -7,8 +7,85 @@ import {
     Image,
     Text,
 } from "react-native";
+import { AntDesign } from '@expo/vector-icons'; 
+import { Audio } from 'expo-av';
+let sound;
+const MyComponent = ({route,navigation}) => {
+    const [colorLike, setColorLike] = React.useState('blue');
+    const [name, setName] = React.useState("");
+    const [singer, setSinger] = React.useState("");
+    const [image, setImage] = React.useState("");
+    const [duration, setDuration] = React.useState("");
+    const [url, setUrl] = React.useState("");
+    React.useEffect(()=>{
+        const {name, singer, image, duration, url} = route.params;
+        setName(name);
+        setSinger(singer);
+        setImage(image);
+        setDuration(duration);
+        setUrl(url);
 
-function MyComponent(props) {
+    }
+    ,[])
+    useEffect(() => {
+        if (route.params && route.params.url) {
+          setUrl(route.params.url);
+          playAudio(route.params.url);
+        }
+      }, [route.params?.url]);
+     
+      const playAudio = async (audioPath) => {
+        try {
+          if (sound) {
+            await sound.unloadAsync(); // Ngừng audio trước khi phát audio mới
+          }
+      
+          const { sound: newSound } = await Audio.Sound.createAsync({ uri: url });
+          sound = newSound; // Lưu trữ audio mới
+          sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+          await sound.playAsync();
+        } catch (error) {
+          console.log('Error loading sound: ', error);
+        }
+      };
+      
+      // Thêm useEffect để release resource khi component bị unmount
+      useEffect(() => {
+        return () => {
+          if (sound) {
+            sound.unloadAsync();
+          }
+        };
+      }, []);
+      const handlePlayWithoutPress = () => {
+        if (url) {
+          playAudio(url);
+        }
+      };
+      const [sound, setSound] = useState(null);
+
+  useEffect(() => {
+    const { name, singer, image, duration, url } = route.params;
+    
+    const playAudio = async () => {
+      try {
+        const { sound: newSound } = await Audio.Sound.createAsync({ uri: url });
+        setSound(newSound);
+        await newSound.playAsync();
+      } catch (error) {
+        console.log('Error loading sound: ', error);
+      }
+    };
+
+    playAudio();
+
+    // Unload sound khi component bị unmount
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, [route.params]);
     return (
         <View style={styles.view1}>
             <View style = {styles.header}>
@@ -22,33 +99,19 @@ function MyComponent(props) {
             
             <Image
                 resizeMode="contain"
-                source={{
-                    uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/7d6f8d28-b81f-4e38-bdaf-661a937e4795?apiKey=6861cb893c484cb8bc5ad74d90012a87&",
-                }}
+                source={
+                    image
+                }
                 style={styles.image3}
             />
             <View style={styles.view7}>
-                <Image
-                    resizeMode="contain"
-                    source={{
-                        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/0ca290e9-d368-471e-aee8-5ba4c54838de?apiKey=6861cb893c484cb8bc5ad74d90012a87&",
-                    }}
-                    style={styles.image4}
-                />
-                <Image
-                    resizeMode="contain"
-                    source={{
-                        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/b1add68b-743a-483a-97c1-827ecf57406d?apiKey=6861cb893c484cb8bc5ad74d90012a87&",
-                    }}
-                    style={styles.image5}
-                />
-                <Image
-                    resizeMode="contain"
-                    source={{
-                        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/ad6640f4-3b95-4444-8cec-1bef5031d4d5?apiKey=6861cb893c484cb8bc5ad74d90012a87&",
-                    }}
-                    style={styles.image6}
-                />
+            <AntDesign name="dislike2" size={24} color="black" />
+                <View style={styles.image5}>
+                    <Text style = {styles.text1}>{name}</Text>
+                    <Text style = {styles.text2}>{singer}</Text>
+                </View>
+                {/*  */}
+                <AntDesign name="like2" size={24} color="black" />
             </View>
             <View style={styles.view8}>
                 <View style={styles.view9}>
@@ -67,13 +130,14 @@ function MyComponent(props) {
                     <Text>3:03</Text>
                 </View>
             </View>
-            <Image
-                resizeMode="contain"
-                source={{
-                    uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/cece29b6-0cba-4e7b-b8a9-a88cdf25f3a7?apiKey=6861cb893c484cb8bc5ad74d90012a87&",
-                }}
-                style={styles.image8}
-            />
+            <View style = {styles.options}>
+                <AntDesign name="forward" size={30} color="black" />
+                <AntDesign name="stepbackward" size={30} color="black" />
+                <AntDesign name="playcircleo" size={60} color="black" onPress={handlePlayWithoutPress}/>
+                <AntDesign name="stepforward" size={30} color="black" />
+                <AntDesign name="retweet" size={30} color="black" />
+            </View>
+           
             <View style={styles.view12}>
                 <View style={styles.view13}>
                     <View style={styles.view14}>
@@ -218,14 +282,26 @@ const styles = StyleSheet.create({
         aspectRatio: "1",
     },
     image5: {
-        overflow: "hidden",
-        alignSelf: "start",
-        position: "relative",
-        display: "flex",
-        width: 121,
-        maxWidth: "100%",
-        flexDirection: "column",
-        aspectRatio: "2.81",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    text1: {
+        color: "#000",
+        alignSelf: "center",
+        whiteSpace: "nowrap",
+        margin: "auto 0",
+        fontWeight: "bold", // Ví dụ: đặt fontWeight là bold
+        fontSize: 18, // Ví dụ: đặt fontSize là 18
+        // Các thuộc tính style khác
+    },
+    text2:{
+        color: "gray",
+        alignSelf: "center",
+        whiteSpace: "nowrap",
+        margin: "auto 0",
+        fontWeight: "bold", // Ví dụ: đặt fontWeight là bold
+        fontSize: 18, // Ví dụ: đặt fontSize là 18
+        // Các thuộc tính style khác
     },
     image6: {
         overflow: "hidden",
@@ -347,6 +423,18 @@ const styles = StyleSheet.create({
         maxWidth: "100%",
         flexDirection: "column",
         aspectRatio: "27.5",
+    },
+    options: {
+        alignSelf: "center",
+        display: "flex",
+        marginTop: 10,
+        width: 360,
+        maxWidth: "100%",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 20,
+        padding: "0 20px",
+        flexDirection: 'row',
     },
 });
 export default MyComponent;

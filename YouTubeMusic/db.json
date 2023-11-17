@@ -7,7 +7,47 @@
       "duration":"6:02",
       "singer": "Thành Đạt",
       "image": "https://lh3.googleusercontent.com/YXUb8Reei3riqh9s0xO2m5TE9NF8txl5-mjN0XN0wwbVw-tKxfpd6q0LFJqqWAfpWnMBbtIhykQ_7NM=w544-h544-l90-rj",
-      "mp3": "NGÀY MAI NGƯỜI TA LẤY CHỒNG - THÀNH ĐẠT x ĐÔNG THIÊN ĐỨC _ OFFICIAL MV _ Ngày Hôm Ấy Em Đi Trong Mưa.mp3"
+      "mp3": "https://res.cloudinary.com/djkmqg6tr/video/upload/v1700206941/NG%C3%80Y_MAI_NG%C6%AF%E1%BB%9CI_TA_L%E1%BA%A4Y_CH%E1%BB%92NG_-_TH%C3%80NH_%C4%90%E1%BA%A0T_x_%C4%90%C3%94NG_THI%C3%8AN_%C4%90%E1%BB%A8C___OFFICIAL_MV___Ng%C3%A0y_H%C3%B4m_%E1%BA%A4y_Em_%C4%90i_Trong_M%C6%B0a_1_kjq78y.mp4"
+
+    },
+    {
+      "id": 2,
+      "title": "json-server",
+      "name": "Lạ Lùng",
+      "duration":"6:02",
+      "singer": "Vũ",
+      "image": "https://lh3.googleusercontent.com/YXUb8Reei3riqh9s0xO2m5TE9NF8txl5-mjN0XN0wwbVw-tKxfpd6q0LFJqqWAfpWnMBbtIhykQ_7NM=w544-h544-l90-rj",
+      "mp3": "https://music.apple.com/vn/album/ng%C3%A0y-mai-ng%C6%B0%E1%BB%9Di-ta-l%E1%BA%A5y-ch%E1%BB%93ng/1702332016?i=1702332020"
+
+    },
+    {
+      "id": 3,
+      "title": "json-server",
+      "name": "Ngày mai người ta lấy chồng",
+      "duration":"6:02",
+      "singer": "Thành Đạt",
+      "image": "https://lh3.googleusercontent.com/YXUb8Reei3riqh9s0xO2m5TE9NF8txl5-mjN0XN0wwbVw-tKxfpd6q0LFJqqWAfpWnMBbtIhykQ_7NM=w544-h544-l90-rj",
+      "mp3": "https://music.apple.com/vn/album/ng%C3%A0y-mai-ng%C6%B0%E1%BB%9Di-ta-l%E1%BA%A5y-ch%E1%BB%93ng/1702332016?i=1702332020"
+
+    },
+    {
+      "id": 4,
+      "title": "json-server",
+      "name": "Ngày mai người ta lấy chồng",
+      "duration":"6:02",
+      "singer": "Thành Đạt",
+      "image": "https://lh3.googleusercontent.com/YXUb8Reei3riqh9s0xO2m5TE9NF8txl5-mjN0XN0wwbVw-tKxfpd6q0LFJqqWAfpWnMBbtIhykQ_7NM=w544-h544-l90-rj",
+      "mp3": "https://music.apple.com/vn/album/ng%C3%A0y-mai-ng%C6%B0%E1%BB%9Di-ta-l%E1%BA%A5y-ch%E1%BB%93ng/1702332016?i=1702332020"
+
+    },
+    {
+      "id": 5,
+      "title": "json-server",
+      "name": "Ngày mai người ta lấy chồng",
+      "duration":"6:02",
+      "singer": "Thành Đạt",
+      "image": "https://lh3.googleusercontent.com/YXUb8Reei3riqh9s0xO2m5TE9NF8txl5-mjN0XN0wwbVw-tKxfpd6q0LFJqqWAfpWnMBbtIhykQ_7NM=w544-h544-l90-rj",
+      "mp3": "https://music.apple.com/vn/album/ng%C3%A0y-mai-ng%C6%B0%E1%BB%9Di-ta-l%E1%BA%A5y-ch%E1%BB%93ng/1702332016?i=1702332020"
 
     }
   ]
