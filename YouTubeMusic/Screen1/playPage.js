@@ -7,96 +7,239 @@ import {
     Image,
     Text,
 } from "react-native";
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
+import axios from 'axios';
+import Slider from '@react-native-community/slider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 let sound;
-const MyComponent = ({route,navigation}) => {
-    const [colorLike, setColorLike] = React.useState('blue');
-    const [name, setName] = React.useState("");
-    const [singer, setSinger] = React.useState("");
-    const [image, setImage] = React.useState("");
-    const [duration, setDuration] = React.useState("");
-    const [url, setUrl] = React.useState("");
-    React.useEffect(()=>{
-        const {name, singer, image, duration, url} = route.params;
+const MyComponent = ({ route, navigation }) => {
+    const [id, setId] = useState(0); // id của bài hát đang được chọn
+    const [name, setName] = useState("");
+    const [singer, setSinger] = useState("");
+    const [image, setImage] = useState("");
+    const [duration, setDuration] = useState(0);
+    const [currentPosition, setCurrentPosition] = useState(0);
+    const [url, setUrl] = useState("");
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [data, setData] = useState([]); // State để lưu trữ danh sách các bài hát từ JSON Server
+    const [playedTime, setPlayedTime] = useState(0);
+    const [remainingTime, setRemainingTime] = useState(0);
+    
+    
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/song');
+                setData(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+    //Lấy danh sách tất cả  bài hát từ json-server
+
+    console.log(data);
+
+
+
+
+    useEffect(() => {
+        const { id, name, singer, image, duration, url } = route.params;
+        setId(id);
         setName(name);
         setSinger(singer);
         setImage(image);
-        setDuration(duration);
+        setDuration(convertTimeStringToSeconds(duration));
         setUrl(url);
+        playAudio(url);
 
-    }
-    ,[])
-    useEffect(() => {
-        if (route.params && route.params.url) {
-          setUrl(route.params.url);
-          playAudio(route.params.url);
-        }
-      }, [route.params?.url]);
-     
-      const playAudio = async (audioPath) => {
-        try {
-          if (sound) {
-            await sound.unloadAsync(); // Ngừng audio trước khi phát audio mới
-          }
-      
-          const { sound: newSound } = await Audio.Sound.createAsync({ uri: url });
-          sound = newSound; // Lưu trữ audio mới
-          sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
-          await sound.playAsync();
-        } catch (error) {
-          console.log('Error loading sound: ', error);
-        }
-      };
-      
-      // Thêm useEffect để release resource khi component bị unmount
-      useEffect(() => {
         return () => {
-          if (sound) {
-            sound.unloadAsync();
-          }
+            if (sound) {
+                sound.unloadAsync();
+            }
         };
-      }, []);
-      const handlePlayWithoutPress = () => {
-        if (url) {
-          playAudio(url);
+    }, [route.params]);
+
+
+    const playAudio = async (audioPath) => {
+        try {
+            if (sound) {
+                await sound.unloadAsync();
+            }
+
+            const { sound: newSound, status } = await Audio.Sound.createAsync({ uri: audioPath });
+            sound = newSound;
+            sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+            await sound.playAsync();
+            //setDuration(convertTimeStringToSeconds(duration));
+            setDuration(status.durationMillis / 1000); // Cập nhật duration
+            setIsPlaying(true);
+        } catch (error) {
+            console.log('Error loading sound: ', error);
         }
-      };
-      const [sound, setSound] = useState(null);
-
-  useEffect(() => {
-    const { name, singer, image, duration, url } = route.params;
+    };
+    // const onPlaybackStatusUpdate = (status) => {
+    //     if (status.positionMillis !== undefined) {
+    //         setCurrentPosition(status.positionMillis / 1000); // Cập nhật currentPosition
+    //         setPlayedTime(status.positionMillis / 1000); // Cập nhật playedTime
+    //         setRemainingTime((status.durationMillis - status.positionMillis) / 1000); // Tính remainingTime
     
-    const playAudio = async () => {
-      try {
-        const { sound: newSound } = await Audio.Sound.createAsync({ uri: url });
-        setSound(newSound);
-        await newSound.playAsync();
-      } catch (error) {
-        console.log('Error loading sound: ', error);
-      }
+    //         // Đồng bộ hóa playedTime với thời gian phát trong trạng thái status
+    //         setPlayedTime(status.positionMillis / 1000);
+    //     }
+    // };
+
+    // const onPlaybackStatusUpdate = (status) => {
+    //     if (status.positionMillis !== undefined && status.durationMillis !== undefined) {
+    //         setDuration(status.durationMillis / 1000);
+    //         setPlayedTime(status.positionMillis / 1000);
+    //         setRemainingTime((status.durationMillis - status.positionMillis) / 1000);
+            
+    //         // Kiểm tra xem âm thanh có đang phát không trước khi cập nhật currentPosition
+    //         if (status.isPlaying) {
+    //             setCurrentPosition(status.positionMillis / 1000);
+    //         }
+    //     }
+    // };
+    const onPlaybackStatusUpdate = (status) => {
+        if (status.positionMillis !== undefined && status.durationMillis !== undefined) {
+            setDuration(status.durationMillis / 1000);
+            setPlayedTime(status.positionMillis / 1000);
+            setRemainingTime((status.durationMillis - status.positionMillis) / 1000);
+            
+            if (status.isPlaying) {
+                setCurrentPosition(status.positionMillis / 1000);
+            } else {
+                // Nếu bài hát đã dừng, giữ nguyên giá trị currentPosition.
+                setCurrentPosition(currentPosition);
+            }
+        }
     };
 
-    playAudio();
-
-    // Unload sound khi component bị unmount
-    return () => {
-      if (sound) {
-        sound.unloadAsync();
-      }
+    const handlePlayPause = async () => {
+        if (sound) {
+            if (isPlaying) {
+                await sound.pauseAsync();
+                setIsPlaying(false);
+                setCurrentPosition(currentPosition); // Giữ nguyên thời gian khi tạm dừng
+            } else {
+                await sound.playAsync();
+                setIsPlaying(true);
+            }
+        }
     };
-  }, [route.params]);
+    // tìm song theo id
+    const findSong = (id) => {
+        const song = data.find((item) => item.id === id);
+        return song;
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (isPlaying) {
+                setCurrentPosition((prevPosition) => {
+                    const newPosition = prevPosition + 1;
+                    return newPosition <= duration ? newPosition : duration;
+                });
+            }
+        }, 1000);
+    
+        return () => clearInterval(interval);
+    }, [duration, isPlaying]);
+
+    const handleNextSong = () => { // Xử lý khi nhấn nút next
+        const nextSong = findSong(id + 1);
+        if (nextSong) {
+            setId(nextSong.id);
+            setName(nextSong.name);
+            setSinger(nextSong.singer);
+            setImage(nextSong.image);
+            setDuration(convertTimeStringToSeconds(nextSong.duration));
+            setUrl(nextSong.mp3);
+            playAudio(nextSong.mp3);
+        }
+    }
+
+    // Xử lý khi nhấn nút prev
+    const handlePrevSong = () => {
+        const prevSong = findSong(id - 1);
+        if (prevSong) {
+            setId(prevSong.id);
+            setName(prevSong.name);
+            setSinger(prevSong.singer);
+            setImage(prevSong.image);
+            setDuration(convertTimeStringToSeconds(prevSong.duration));
+            
+            setUrl(prevSong.mp3);
+            playAudio(prevSong.mp3);
+        }
+    }
+
+
+    const convertTimeStringToSeconds = (timeString) => {
+        try {
+            const [minutes, seconds] = timeString.split(':').map(Number);
+            return minutes * 60 + seconds;
+        } catch (error) {
+            console.error('Lỗi khi chuyển đổi chuỗi thời lượng', error);
+            return 0;
+        }
+    };
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+
+    const handleSliderChange = (value) => {
+        setPlayedTime(value);
+    };
+    
+   
+    // const handleSliderComplete = async (value) => {
+    //     if (sound) {
+    //         await sound.setPositionAsync(value * 1000); // Chuyển đổi giây thành mili giây
+    //         if (isPlaying) { // Kiểm tra nếu nhạc đang được phát
+    //             setPlayedTime(value);
+    //             setCurrentPosition(value); // Chỉ cập nhật currentPosition khi nhạc đang phát
+    //         }
+    //         if (!isPlaying) {
+    //             await sound.playFromPositionAsync(value * 1000);
+    //             setIsPlaying(true);
+    //         }
+    //     }
+    // };
+
+    const handleSliderComplete = async (value) => {
+        if (sound) {
+            await sound.setPositionAsync(value * 1000); // Chuyển đổi giây thành mili giây
+            if (isPlaying) { // Kiểm tra nếu nhạc đang được phát
+                setPlayedTime(value);
+                setCurrentPosition(value); // Chỉ cập nhật currentPosition khi nhạc đang phát
+            }
+            if (!isPlaying) {
+                await sound.playFromPositionAsync(value * 1000);
+                setIsPlaying(true);
+            }
+        }
+    };
+   
     return (
         <View style={styles.view1}>
-            <View style = {styles.header}>
-                    <View style={styles.view5}>
-                        <Text>Song</Text>
-                    </View>
-                    <View style={styles.view6}>
-                        <Text>Video</Text>
-                    </View>
+            <View style={styles.header}>
+                <View style={styles.view5}>
+                    <Text>Song</Text>
+                </View>
+                <View style={styles.view6}>
+                    <Text>Video</Text>
+                </View>
             </View>
-            
+
             <Image
                 resizeMode="contain"
                 source={
@@ -105,10 +248,10 @@ const MyComponent = ({route,navigation}) => {
                 style={styles.image3}
             />
             <View style={styles.view7}>
-            <AntDesign name="dislike2" size={24} color="black" />
+                <AntDesign name="dislike2" size={24} color="black" />
                 <View style={styles.image5}>
-                    <Text style = {styles.text1}>{name}</Text>
-                    <Text style = {styles.text2}>{singer}</Text>
+                    <Text style={styles.text1}>{name}</Text>
+                    <Text style={styles.text2}>{singer}</Text>
                 </View>
                 {/*  */}
                 <AntDesign name="like2" size={24} color="black" />
@@ -122,22 +265,47 @@ const MyComponent = ({route,navigation}) => {
                         }}
                         style={styles.image7}
                     />
-                    <View style={styles.view10}>
-                        <Text>0:35</Text>
-                    </View>
+
                 </View>
-                <View style={styles.view11}>
-                    <Text>3:03</Text>
-                </View>
+
             </View>
-            <View style = {styles.options}>
+          
+            <View style={styles.audioBar}>
+           
+            <Slider
+                
+                style={{ width: '100%', height: 40 }}
+                minimumValue={0}
+                maximumValue={duration}
+                value={playedTime} // Thay đổi từ currentPosition sang playedTime
+                minimumTrackTintColor="#000000"
+                maximumTrackTintColor="#FFFFFF"
+                onSlidingComplete={handleSliderComplete}
+                onValueChange={handleSliderChange}
+
+                
+             
+            />
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 46, marginBottom: 5 }}>
+                <Text style={styles.timeText}>{formatTime(currentPosition)}</Text>
+                <Text style={styles.timeText}>{formatTime(remainingTime)}</Text>
+              
+            </View>
+
+            <View style={styles.options}>
                 <AntDesign name="forward" size={30} color="black" />
-                <AntDesign name="stepbackward" size={30} color="black" />
-                <AntDesign name="playcircleo" size={60} color="black" onPress={handlePlayWithoutPress}/>
-                <AntDesign name="stepforward" size={30} color="black" />
+                <AntDesign name="stepbackward" size={30} color="black" onPress={handlePrevSong} />
+                <AntDesign
+                    name={isPlaying ? "pausecircleo" : "playcircleo"}
+                    size={60}
+                    color="black"
+                    onPress={handlePlayPause}
+                />
+                <AntDesign name="stepforward" size={30} color="black" onPress={handleNextSong} />
                 <AntDesign name="retweet" size={30} color="black" />
             </View>
-           
+
             <View style={styles.view12}>
                 <View style={styles.view13}>
                     <View style={styles.view14}>
@@ -158,7 +326,7 @@ const MyComponent = ({route,navigation}) => {
 
 const styles = StyleSheet.create({
     view1: {
-        backgroundColor: "#FFF",
+        backgroundColor: "#fff",
         display: "flex",
         width: '100%',
         flexDirection: "column",
@@ -174,7 +342,7 @@ const styles = StyleSheet.create({
         gap: 20,
         padding: "0 20px",
         flexDirection: 'row',
-    
+
     },
     view2: {
         alignSelf: "center",
@@ -254,10 +422,11 @@ const styles = StyleSheet.create({
         position: "relative",
         display: "flex",
         marginTop: 34,
-        width: 359,
+        width: 380,
         maxWidth: "100%",
         flexDirection: "column",
         aspectRatio: "1",
+        height: 300
     },
     view7: {
         alignSelf: "center",
@@ -294,7 +463,7 @@ const styles = StyleSheet.create({
         fontSize: 18, // Ví dụ: đặt fontSize là 18
         // Các thuộc tính style khác
     },
-    text2:{
+    text2: {
         color: "gray",
         alignSelf: "center",
         whiteSpace: "nowrap",
@@ -435,6 +604,22 @@ const styles = StyleSheet.create({
         gap: 20,
         padding: "0 20px",
         flexDirection: 'row',
+    },
+    audioBar: {
+        height: 3,
+        width: '80%',
+        backgroundColor: 'white',
+        marginLeft: 30
+
+    },
+    progress: {
+        height: '100%', // Chiều cao của thanh tiến triển bằng với thanh thời lượng
+        backgroundColor: 'black',
+    },
+    timeText: {
+        color: '#000',
+        marginTop: 10,
+        marginLeft: 30
     },
 });
 export default MyComponent;
