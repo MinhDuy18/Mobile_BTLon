@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useContext} from 'react';
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -6,9 +6,11 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AudioContext } from './AudioContext';
 const listPlay = ({ navigation }) => {
     const [data, setData] = useState([]);
     const [selectedSong, setSelectedSong] = useState(null);
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -22,7 +24,7 @@ const listPlay = ({ navigation }) => {
         fetchData();
     }, []);
 
-
+  
 
     console.log(data);
     useEffect(() => {
@@ -55,6 +57,7 @@ const listPlay = ({ navigation }) => {
             });
         }
     };
+   
     return (
         <View style={styles.container}>
             <View style={styles.View1}>
@@ -109,6 +112,9 @@ const listPlay = ({ navigation }) => {
 
                 </FlatList>
             </View>
+           
+           
+      
         </View>
     )
 }

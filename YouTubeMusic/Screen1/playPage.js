@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
     FlatList,
     ScrollView,
@@ -12,6 +12,9 @@ import { Audio } from 'expo-av';
 import axios from 'axios';
 import Slider from '@react-native-community/slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TouchableOpacity } from "react-native-web";
+import { AudioContext } from "./AudioContext";
+
 let sound;
 const MyComponent = ({ route, navigation }) => {
     const [id, setId] = useState(0); // id của bài hát đang được chọn
@@ -25,8 +28,10 @@ const MyComponent = ({ route, navigation }) => {
     const [data, setData] = useState([]); // State để lưu trữ danh sách các bài hát từ JSON Server
     const [playedTime, setPlayedTime] = useState(0);
     const [remainingTime, setRemainingTime] = useState(0);
+
     
-    
+   
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -228,17 +233,13 @@ const MyComponent = ({ route, navigation }) => {
             }
         }
     };
-   
+     const [colorLike, setColorLike] = useState('black');
+    const [colorDislike, setColorDislike] = useState('black');
     return (
         <View style={styles.view1}>
-            <View style={styles.header}>
-                <View style={styles.view5}>
-                    <Text>Song</Text>
-                </View>
-                <View style={styles.view6}>
-                    <Text>Video</Text>
-                </View>
-            </View>
+            <TouchableOpacity style={styles.header} onPress={() => navigation.navigate('listPlay')}>
+                  <AntDesign name="down" size={30} color="black" />   
+            </TouchableOpacity>
 
             <Image
                 resizeMode="contain"
@@ -248,13 +249,25 @@ const MyComponent = ({ route, navigation }) => {
                 style={styles.image3}
             />
             <View style={styles.view7}>
-                <AntDesign name="dislike2" size={24} color="black" />
+                <TouchableOpacity onPress={() => (
+                    setColorLike("black"),
+                    setColorDislike("blue")
+                )}>
+                     <AntDesign name="dislike2" size={24} color= {colorDislike} />   
+                </TouchableOpacity>
+               
                 <View style={styles.image5}>
                     <Text style={styles.text1}>{name}</Text>
                     <Text style={styles.text2}>{singer}</Text>
                 </View>
                 {/*  */}
-                <AntDesign name="like2" size={24} color="black" />
+               
+                <TouchableOpacity onPress={() => (
+                    setColorLike("blue"),
+                    setColorDislike("black")
+                )}>
+                      <AntDesign name="like2" size={24} color={colorLike} />
+                </TouchableOpacity>
             </View>
             <View style={styles.view8}>
                 <View style={styles.view9}>
@@ -334,8 +347,8 @@ const styles = StyleSheet.create({
     header: {
         alignSelf: "center",
         display: "flex",
-        marginTop: 15,
-        width: 156,
+        marginTop: 33,
+        width: 360,
         maxWidth: "100%",
         alignItems: "flex-start",
         justifyContent: "space-between",
