@@ -7,13 +7,14 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import FilterCard from "../conponents/FilterCard";
 import ListenAgain from "../conponents/ListenAgain";
 import MixedCard from "../conponents/MixedCard";
 import BottomBar from "../conponents/BottomBar";
-import { Avatar } from "react-native-paper";
+import { Avatar, Modal, PaperProvider, Portal } from "react-native-paper";
+import MagnifyModal from "../conponents/MagnifyModal";
 export default function HomeScreen() {
   const [filter, setFilter] = useState([
     "Nạp năng lượng",
@@ -26,20 +27,18 @@ export default function HomeScreen() {
     "Lãng mạn",
     "Dễ ngủ",
   ]);
-  const [listenAgain, setListenAgain] = useState([
-    { id: 1, name: "Pink Ponk", img: "image 1.png" },
-    { id: 2, name: "Pink Ponk", img: "image 1.png" },
-    { id: 3, name: "Pink Ponk", img: "image 1.png" },
-    { id: 4, name: "Pink Ponk", img: "image 1.png" },
-    { id: 5, name: "Pink Ponk", img: "image 1.png" },
-    { id: 6, name: "Pink Ponk", img: "image 1.png" },
-    { id: 7, name: "Pink Ponk", img: "image 1.png" },
-    { id: 8, name: "Pink Ponk", img: "image 1.png" },
-    { id: 9, name: "Pink Ponk", img: "image 1.png" },
-    { id: 10, name: "Pink Ponk", img: "image 1.png" },
-    { id: 11, name: "Pink Ponk", img: "image 1.png" },
-    { id: 12, name: "Pink Ponk", img: "image 1.png" },
-  ]);
+  // listen again
+  const [songs, setSongs] = useState([]);
+  const[visible,setVisible] = useState(false);
+  const numColumns = 6;
+  useEffect(() => {
+    fetch("http://localhost:3000/song")
+      .then((response) => response.json())
+      .then((json) => {
+        setSongs(json);
+        console.log(songs);
+      });
+  }, []);
   const [mixed, setMixed] = useState([
     { id: 1, name: "Pink Ponk", img: "image 1.png" },
     { id: 2, name: "Pink Ponk", img: "image 1.png" },
@@ -83,7 +82,10 @@ export default function HomeScreen() {
               alignItems: "flex-end",
             }}
           >
-            <TouchableOpacity style={{ alignItems: "flex-end" }}>
+            <TouchableOpacity
+              style={{ alignItems: "flex-end" }}
+              onPress={()=>setVisible(true)}
+            >
               <Image
                 source={require("../img/search.png")}
                 style={{ width: 30, height: 30 }}
@@ -123,11 +125,13 @@ export default function HomeScreen() {
           alwaysBounceVertical={false}
         >
           <FlatList
+            key={"#"}
+            keyExtractor={(item) => "#" + item.id}
             contentContainerStyle={{ alignSelf: "flex-start" }}
-            numColumns={Math.ceil(listenAgain.length / 2)}
+            numColumns={numColumns}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            data={listenAgain}
+            data={songs}
             renderItem={({ item, index }) => (
               <ListenAgain item={item} key={index} />
             )}
@@ -155,9 +159,9 @@ export default function HomeScreen() {
           )}
         ></FlatList>
       </ScrollView>
-          <BottomBar/>
+      <BottomBar />
+      <MagnifyModal visible={visible}/>
     </LinearGradient>
   );
 }
-
 const styles = StyleSheet.create({});
