@@ -1,14 +1,14 @@
 import React, { useState,useEffect } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 
-const YourPage = ({visible}) => {
-  const [modalVisible, setModalVisible] = useState(visible);
+const YourPage = ({visible,onClose}) => {
+  const [modalVisible, setModalVisible] = useState(true);
   useEffect(()=>{setModalVisible(visible);},[visible]);
   return (
     <View style={styles.container}>
       <Modal
-        animationType="slide"
-        transparent={true}
+        animationType='none'
+        transparent={false}
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(false);
@@ -17,7 +17,7 @@ const YourPage = ({visible}) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text>Nội dung của modal ở trang này</Text>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <TouchableOpacity onPress={onClose}>
               <Text style={styles.closeButton}>Đóng Modal</Text>
             </TouchableOpacity>
           </View>
@@ -44,10 +44,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
+    width:'100%',
+    height:'100%',
+    backgroundColor: 'black',
   },
   closeButton: {
     marginTop: 10,

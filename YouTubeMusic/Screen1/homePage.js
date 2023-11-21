@@ -12,8 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import FilterCard from "../conponents/FilterCard";
 import ListenAgain from "../conponents/ListenAgain";
 import MixedCard from "../conponents/MixedCard";
-import BottomBar from "../conponents/BottomBar";
-import { Avatar, Modal, PaperProvider, Portal } from "react-native-paper";
+import { Avatar} from "react-native-paper";
 import MagnifyModal from "../conponents/MagnifyModal";
 export default function HomeScreen() {
   const [filter, setFilter] = useState([
@@ -159,8 +158,7 @@ export default function HomeScreen() {
           )}
         ></FlatList>
       </ScrollView>
-      <BottomBar />
-      <MagnifyModal visible={visible}/>
+      <MagnifyModal visible={visible} onClose={()=>setVisible(false)}/>
     </LinearGradient>
   );
 }
