@@ -12,6 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import FilterCard from "../conponents/FilterCard";
 import ListenAgain from "../conponents/ListenAgain";
 import MixedCard from "../conponents/MixedCard";
+import FilterSong from "../conponents/FilterSong";
 import { Avatar } from "react-native-paper";
 import MagnifyModal from "../conponents/MagnifyModal";
 export default function HomeScreen() {
@@ -41,16 +42,11 @@ export default function HomeScreen() {
   }, []);
   useEffect(onFilter, [filter]);
   function onFilter() {
-    console.log(filter);
     var list = songs.filter((item) => item.genres.includes(filter));
-    if(list.length>12)
-      list =list.slice(0,12)
-    else if(list.length>9)
-    list = list.slice(0,9)
-    else if(list.length>6)
-    list = list.slice(0,6)
-    else if(list.length>3)
-    list =  list.slice(0,3)
+    if (list.length > 12) list = list.slice(0, 12);
+    else if (list.length > 9) list = list.slice(0, 9);
+    else if (list.length > 6) list = list.slice(0, 6);
+    else if (list.length > 3) list = list.slice(0, 3);
     setSongForYou(list);
   }
   const [mixed, setMixed] = useState([
@@ -114,6 +110,7 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
         </View>
+{/* filter */}
         <ScrollView horizontal={true} showsVerticalScrollIndicator>
           {filter_list.map((item) => (
             <FilterCard
@@ -125,8 +122,7 @@ export default function HomeScreen() {
         </ScrollView>
       </View>
       <ScrollView>
-        <View
-        >
+        <View>
           <Text
             style={{
               fontSize: 24,
@@ -138,59 +134,10 @@ export default function HomeScreen() {
           >
             {filter}
           </Text>
-
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            directionalLockEnabled={true}
-            alwaysBounceVertical={false}
-          >
-            <FlatList
-              numColumns={3}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              data={songForYou}
-              renderItem={({ item }) => {
-                return (
-                    <TouchableOpacity
-                      style={{
-                        flexDirection: "row",
-                        height: 60,
-                        width:window.innerWidth,
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        paddingLeft: 20,
-                      }}
-                    >
-                      <Image
-                        source={item.image}
-                        style={{
-                          height: 50,
-                          width: 50,
-                          resizeMode: "contain",
-                          borderRadius: 15,
-                          marginRight: 10,
-                        }}
-                      ></Image>
-                      <View
-                        style={{
-                          paddingHorizontal: 20,
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Text style={{ fontSize: 16, color: "white" }}>
-                          {item.name}
-                        </Text>
-                        <Text style={{ fontSize: 16, color: "grey" }}>
-                          {item.singer}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                );
-              }}
-            ></FlatList>
-          </ScrollView>
+{/* filter list  */}
+            <FilterSong items={songForYou}/>
         </View>
+{/* listen again */}
         <Text
           style={{
             fontSize: 24,
@@ -221,6 +168,7 @@ export default function HomeScreen() {
             )}
           />
         </ScrollView>
+{/* mixed for you */}
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text
             style={{
@@ -243,6 +191,7 @@ export default function HomeScreen() {
           )}
         ></FlatList>
       </ScrollView>
+{/* magnify search */}
       <MagnifyModal visible={visible} onClose={() => setVisible(false)} />
     </LinearGradient>
   );

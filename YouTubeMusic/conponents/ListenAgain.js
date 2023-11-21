@@ -4,7 +4,7 @@ import React from "react";
 const ListenAgain = ({item }) => {
   return (
     <View>
-      <TouchableOpacity style={{width:120,justifyContent:"center",alignItems:"center",marginHorizontal:5,marginVertical:10}}>
+      <TouchableOpacity style={{width:120,justifyContent:"center",alignItems:"flex-start",marginHorizontal:5,marginVertical:10}}>
         <Image
           source={item.image}
           style={{

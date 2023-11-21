@@ -46,8 +46,9 @@ const YourPage = ({ visible, onClose }) => {
                   height: 36,
                   borderRadius: 20,
                   backgroundColor: "#222222",
-                  paddingLeft: 10,
+                  paddingLeft: 20,
                   fontSize: 20,
+                  color: "white",
                 }}
               ></TextInput>
               <TouchableOpacity>
