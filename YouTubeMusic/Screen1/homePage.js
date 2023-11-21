@@ -12,32 +12,47 @@ import { LinearGradient } from "expo-linear-gradient";
 import FilterCard from "../conponents/FilterCard";
 import ListenAgain from "../conponents/ListenAgain";
 import MixedCard from "../conponents/MixedCard";
-import { Avatar} from "react-native-paper";
+import { Avatar } from "react-native-paper";
 import MagnifyModal from "../conponents/MagnifyModal";
 export default function HomeScreen() {
-  const [filter, setFilter] = useState([
-    "Nạp năng lượng",
-    "Thư giãn",
-    "Vui tươi",
-    "Tập thể dục",
-    "Tiệc tùng",
-    "Tập trung",
-    "Buồn",
-    "Lãng mạn",
-    "Dễ ngủ",
-  ]);
+  const filter_list = [
+    "Energy",
+    "Relax",
+    "Happy",
+    "Exercise",
+    "Party",
+    "Concentrate",
+    "Sad",
+    "Romantic",
+    "Sleep",
+  ];
+  const [filter, setFilter] = useState("");
   // listen again
   const [songs, setSongs] = useState([]);
-  const[visible,setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [songForYou, setSongForYou] = useState([]);
   const numColumns = 6;
   useEffect(() => {
     fetch("http://localhost:3000/song")
       .then((response) => response.json())
       .then((json) => {
         setSongs(json);
-        console.log(songs);
       });
   }, []);
+  useEffect(onFilter, [filter]);
+  function onFilter() {
+    console.log(filter);
+    var list = songs.filter((item) => item.genres.includes(filter));
+    if(list.length>12)
+      list =list.slice(0,12)
+    else if(list.length>9)
+    list = list.slice(0,9)
+    else if(list.length>6)
+    list = list.slice(0,6)
+    else if(list.length>3)
+    list =  list.slice(0,3)
+    setSongForYou(list);
+  }
   const [mixed, setMixed] = useState([
     { id: 1, name: "Pink Ponk", img: "image 1.png" },
     { id: 2, name: "Pink Ponk", img: "image 1.png" },
@@ -83,7 +98,7 @@ export default function HomeScreen() {
           >
             <TouchableOpacity
               style={{ alignItems: "flex-end" }}
-              onPress={()=>setVisible(true)}
+              onPress={() => setVisible(true)}
             >
               <Image
                 source={require("../img/search.png")}
@@ -100,12 +115,82 @@ export default function HomeScreen() {
           </View>
         </View>
         <ScrollView horizontal={true} showsVerticalScrollIndicator>
-          {filter.map((item, index) => (
-            <FilterCard item={item} key={index} />
+          {filter_list.map((item) => (
+            <FilterCard
+              item={item}
+              onFilter={() => setFilter(item)}
+              key={item}
+            />
           ))}
         </ScrollView>
       </View>
       <ScrollView>
+        <View
+        >
+          <Text
+            style={{
+              fontSize: 24,
+              fontStyle: "roboto",
+              color: "white",
+              fontWeight: "bold",
+              marginLeft: 16,
+            }}
+          >
+            {filter}
+          </Text>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            directionalLockEnabled={true}
+            alwaysBounceVertical={false}
+          >
+            <FlatList
+              numColumns={3}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              data={songForYou}
+              renderItem={({ item }) => {
+                return (
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: "row",
+                        height: 60,
+                        width:window.innerWidth,
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                        paddingLeft: 20,
+                      }}
+                    >
+                      <Image
+                        source={item.image}
+                        style={{
+                          height: 50,
+                          width: 50,
+                          resizeMode: "contain",
+                          borderRadius: 15,
+                          marginRight: 10,
+                        }}
+                      ></Image>
+                      <View
+                        style={{
+                          paddingHorizontal: 20,
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text style={{ fontSize: 16, color: "white" }}>
+                          {item.name}
+                        </Text>
+                        <Text style={{ fontSize: 16, color: "grey" }}>
+                          {item.singer}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                );
+              }}
+            ></FlatList>
+          </ScrollView>
+        </View>
         <Text
           style={{
             fontSize: 24,
@@ -158,7 +243,7 @@ export default function HomeScreen() {
           )}
         ></FlatList>
       </ScrollView>
-      <MagnifyModal visible={visible} onClose={()=>setVisible(false)}/>
+      <MagnifyModal visible={visible} onClose={() => setVisible(false)} />
     </LinearGradient>
   );
 }
