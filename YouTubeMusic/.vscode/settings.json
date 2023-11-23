@@ -1,0 +1,10 @@
+{
+    "C_Cpp.default.compilerPath": "",
+    "emmet.preferences": {
+    },
+    "emmet.includeLanguages":{
+        "javascript":"javascriptreact"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+}
