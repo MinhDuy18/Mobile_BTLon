@@ -1,16 +1,21 @@
-// AudioContext.js
-
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState } from "react";
 
 export const AudioContext = createContext();
 
 export const AudioProvider = ({ children }) => {
-  const [currentSong, setCurrentSong] = useState(null);
-  const [isMinimized, setIsMinimized] = useState(false); 
+  const [audioURL, setAudioURL] = useState(""); // URL của audio đang phát
+  const [isPlaying, setIsPlaying] = useState(false); // Trạng thái phát/nghỉ của audio
 
   return (
-    <AudioContext.Provider value={{ currentSong, setCurrentSong, isMinimized, setIsMinimized }}>
-    {children}
-  </AudioContext.Provider>
+    <AudioContext.Provider
+      value={{
+        audioURL,
+        setAudioURL,
+        isPlaying,
+        setIsPlaying
+      }}
+    >
+      {children}
+    </AudioContext.Provider>
   );
 };

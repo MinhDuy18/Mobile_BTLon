@@ -30,9 +30,11 @@ const MyComponent = ({ route, navigation }) => {
     const [remainingTime, setRemainingTime] = useState(0);
 
     
-   
+    
 
-
+    const audioContext = useContext(AudioContext); // Lấy context
+  const { audioURL, isPlaying1, setAudioURL, setIsPlaying1 } = audioContext; 
+        
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -60,6 +62,8 @@ const MyComponent = ({ route, navigation }) => {
         setImage(image);
         setDuration(convertTimeStringToSeconds(duration));
         setUrl(url);
+        // setAudioURL(url);
+        setIsPlaying(isPlaying);
         playAudio(url);
 
         return () => {
@@ -69,6 +73,7 @@ const MyComponent = ({ route, navigation }) => {
         };
     }, [route.params]);
 
+    
 
     const playAudio = async (audioPath) => {
         try {
@@ -82,7 +87,7 @@ const MyComponent = ({ route, navigation }) => {
             await sound.playAsync();
             //setDuration(convertTimeStringToSeconds(duration));
             setDuration(status.durationMillis / 1000); // Cập nhật duration
-            setIsPlaying(true);
+            setIsPlaying(isPlaying);
         } catch (error) {
             console.log('Error loading sound: ', error);
         }
@@ -235,9 +240,25 @@ const MyComponent = ({ route, navigation }) => {
     };
      const [colorLike, setColorLike] = useState('black');
     const [colorDislike, setColorDislike] = useState('black');
+
+    const handleDownButtonPress = () => {
+        // Lưu thông tin bài hát đang phát vào route.params
+        navigation.navigate('listPlay', {
+          currentSong: {
+            id: id,
+            name: name,
+            singer: singer,
+            image: image,
+            duration: duration,
+            url: url
+          }
+        });
+        audioContext.setAudioURL(audioURL);
+        audioContext.setIsPlaying(isPlaying);
+      };
     return (
         <View style={styles.view1}>
-            <TouchableOpacity style={styles.header} onPress={() => navigation.navigate('listPlay')}>
+            <TouchableOpacity style={styles.header} onPress = {handleDownButtonPress}>
                   <AntDesign name="down" size={30} color="black" />   
             </TouchableOpacity>
 
@@ -635,5 +656,4 @@ const styles = StyleSheet.create({
         marginLeft: 30
     },
 });
-export default MyComponent;
-
+export default MyComponent; 

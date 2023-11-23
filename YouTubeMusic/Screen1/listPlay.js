@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -7,10 +7,27 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AudioContext } from './AudioContext';
-const listPlay = ({ navigation }) => {
+import MiniPlay from './MiniPlay'
+import PlayPageModal from './PlayPageModal';
+import { Modal } from 'react-native-web';
+const listPlay = ({ navigation, route }) => {
     const [data, setData] = useState([]);
     const [selectedSong, setSelectedSong] = useState(null);
-    
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const openModalWithSong = (song) => {
+        setSelectedSong(song); // Lưu thông tin bài hát được chọn
+        setModalVisible(true); // Hiển thị Modal
+
+    };
+    const audioContext = useContext(AudioContext);
+    const { isPlaying, setIsPlaying, setAudioURL } = audioContext;
+    // useEffect(() => {
+    //     if (isPlaying) {
+    //         pause();
+    //     }
+    // }, []);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -24,24 +41,37 @@ const listPlay = ({ navigation }) => {
         fetchData();
     }, []);
 
-  
+    // const { currentSong } = route.params || {};
 
     console.log(data);
-    useEffect(() => {
-        // Kiểm tra nếu có bài hát được chọn, phát bài hát đó
+    // useEffect(() => {
+    //     // Kiểm tra nếu có bài hát được chọn, phát bài hát đó
+    //     if (selectedSong) {
+    //         navigation.navigate('playPage', {
+    //             name: selectedSong.name,
+    //             singer: selectedSong.singer,
+    //             image: selectedSong.image,
+    //             duration: selectedSong.duration,
+    //             url: selectedSong.mp3,
+    //             id: selectedSong.id,
+    //         });
+    //         // openModalWithSong(selectedSong);
+    //     }
+    //     // if (selectedSong) {
+
+    //     //     openModalWithSong(selectedSong);
+    //     //    console.log(selectedSong);
+    //     // }
+    // }, [selectedSong]);
+    const onPlay = () => {
         if (selectedSong) {
-            navigation.navigate('playPage', {
-                name: selectedSong.name,
-                singer: selectedSong.singer,
-                image: selectedSong.image,
-                duration: selectedSong.duration,
-                url: selectedSong.mp3,
-                id: selectedSong.id,
-
-            });
+            setAudioURL(selectedSong.url); // Đặt URL của bài hát được chọn để phát nhạc
+            setIsPlaying(true); // Phát nhạc khi Bottom Modal hiển thị
+            setModalVisible(false); // Đóng Modal khi bắt đầu phát nhạc
+        } else {
+          console.error('Invalid song URL'); // Log lỗi nếu URL không hợp lệ
         }
-    }, [selectedSong]);
-
+      };
     const playRandomSong = () => {
         if (data.length > 0) {
             const randomIndex = Math.floor(Math.random() * data.length);
@@ -57,7 +87,8 @@ const listPlay = ({ navigation }) => {
             });
         }
     };
-   
+    console.log('Selected Song:', selectedSong);
+
     return (
         <View style={styles.container}>
             <View style={styles.View1}>
@@ -92,6 +123,8 @@ const listPlay = ({ navigation }) => {
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={() => {
                             setSelectedSong(item); // Lưu thông tin bài hát được chọn
+                            setModalVisible(true);
+                            //    openModalWithSong(item);
                         }}>
                             <View style={styles.song_Style}>
                                 <Image style={styles.img_Song_Style} resizeMode='contain' source={item.image}></Image>
@@ -112,14 +145,29 @@ const listPlay = ({ navigation }) => {
 
                 </FlatList>
             </View>
-           
-           
-      
+            <PlayPageModal
+                visible={modalVisible}
+                song={selectedSong}
+                onClose={() => setModalVisible(false)} // Đóng Modal khi cần
+                onPlay={onPlay}
+            />
+            {/* {selectedSong && (
+                <PlayPageModal
+                    visible={modalVisible}
+                    song={selectedSong}
+                    onClose={() => setModalVisible(false)}
+                />
+            )} */}
+
+            {/* Hiển thị MiniPlay nếu có thông tin bài hát */}
+            {/* {currentSong && <MiniPlay currentSong={currentSong} />} */}
+
         </View>
     )
 }
 export default listPlay;
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         backgroundColor: '#000',

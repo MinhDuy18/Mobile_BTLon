@@ -12,19 +12,14 @@ const screenOptions = {
 
 export default function App() {
   return (
-
     <AudioProvider>
-        <NavigationContainer>
-            
-            <Stack.Navigator screenOptions={screenOptions} initialRouteName='listPlay'>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={screenOptions} initialRouteName='listPlay'>
           <Stack.Screen name="playPage" component={playPage} />
           <Stack.Screen name="listPlay" component={listPlay} />
         </Stack.Navigator>
-        
-       
       </NavigationContainer>
-
-      </AudioProvider>
+    </AudioProvider>
 
    
   );
