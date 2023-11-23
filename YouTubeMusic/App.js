@@ -1,3 +1,4 @@
+
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./Screen1/homePage";
 import ExploreScreen from "./Screen1/explorePage";
@@ -7,7 +8,10 @@ import { Foundation } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
+import { AudioProvider } from './Screen1/AudioContext';
 const Tab = createBottomTabNavigator();
+
+
 const screenOptions = {
   headerShown: false,
   tabBarShowLabel: false,
@@ -21,6 +25,8 @@ const screenOptions = {
 
 export default function App() {
   return (
+
+        <AudioProvider>
     <NavigationContainer>
       <Tab.Navigator screenOptions={screenOptions}>
         <Tab.Screen
@@ -70,5 +76,7 @@ export default function App() {
         ></Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
+</AudioProvider>
+
   );
 }
