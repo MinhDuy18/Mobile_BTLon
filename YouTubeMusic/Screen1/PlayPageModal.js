@@ -1,9 +1,15 @@
-import React , {useEffect}from 'react';
-import { Modal, Text, View, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React , {useEffect, useState}from 'react';
+import { Modal, Text, View, TouchableOpacity, Image, StyleSheet,Dimensions  } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 const PlayPageModal = ({ visible, song, setSong,onClose, sound, isPlaying, setIsPlaying, playbackInstance, data}) => {
- 
+  const [modalFullScreen, setModalFullScreen] = useState(false);
+  const handleModalClick = () => {
+    setModalFullScreen(!modalFullScreen); // Thay đổi trạng thái mở rộng modal khi click
+  };
+  const toggleModalFullScreen = () => {
+    setModalFullScreen(!modalFullScreen); // Set modal thành full screen
+  };
   if (!visible) {
     return null;
   }
@@ -44,6 +50,7 @@ const PlayPageModal = ({ visible, song, setSong,onClose, sound, isPlaying, setIs
     setIsPlaying(false); // Đặt isPlaying thành false khi đóng modal
     console.log("isPlaying in PlayPage", isPlaying); // Kiểm tra giá trị isPlaying sau khi đóng modal
     stopAllSounds();
+    setModalFullScreen(false);
   
 }
 
@@ -122,21 +129,19 @@ const PlayPageModal = ({ visible, song, setSong,onClose, sound, isPlaying, setIs
       }
     }
   };
-  
+  const[isFullScreen, setIsFullScreen] = useState("100px")
   return (
     <Modal
     animationType="slide"
     transparent={true}
     visible={visible}
     onRequestClose={() => onClose()}
-    backdropOpacity={0} // Thêm thuộc tính backdropOpacity để tạo nền modal trong suốt
-   
+    backdropOpacity={0} 
+  // Thêm thuộc tính backdropOpacity để tạo nền modal trong suốt
     >
-      
-     
-      
-          <View style = {styles.container}>
-            <TouchableOpacity>
+          <View style = {styles.down}>
+            <TouchableOpacity onPress={handleModalClick} activeOpacity={1}>
+              <View   style={modalFullScreen ? styles.modalFullScreen : styles.modalNormal}>
               <View style = {styles.modalStyleSub}>
                       <Image style={styles.image} source={{ uri: song.image }} />
                   <View style={styles.details}>
@@ -157,15 +162,28 @@ const PlayPageModal = ({ visible, song, setSong,onClose, sound, isPlaying, setIs
                         <AntDesign name="stepforward" size={24} color="black" />
                       </TouchableOpacity>
                   </View>
-                  <TouchableOpacity onPress={handleClose}>
+                   <TouchableOpacity onPress={handleClose}>
                 <AntDesign name="close" size={24} color="black" />
-          </TouchableOpacity>
+                 </TouchableOpacity> 
+                  <TouchableOpacity onPress={() => (
+                    toggleModalFullScreen(),
+                    setIsFullScreen("100%")
+                 )} > 
+                    <AntDesign name="up" size={24} color="black" />
+                 </TouchableOpacity>
               </View>
+              </View>
+              
           
-       </TouchableOpacity>
+                  </TouchableOpacity>
             </View>
-       {/* Các icon hoặc control nhỏ như play/pause có thể được thêm vào đây */}
-  
+   {/* */} 
+              {/* <View style = {styles.modalContainer}>
+                  <Image style = {styles.image} source={song.image}></Image>
+                  <View style = {styles.ListDanhSachPhat}>
+                      <Text>Danh Sách Phát</Text>
+                  </View>
+              </View> */}
     
     
     </Modal>
@@ -182,61 +200,109 @@ const styles = StyleSheet.create({
     container: {
       position: 'absolute',
       bottom: 0,
+      left: 0,
+      right: 0,
       width: '100%',
       height: 100,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-end',
       backgroundColor: '#ffffff',
-      padding: 10,
+      // padding: 10,
       borderRadius: 8,
       marginBottom: 10,
      
       // Đặt giá trị zIndex cao hơn để modal hiển thị trên các phần tử khác
     },
+    down: {
+      position: 'absolute',
+      bottom: 50,
+      left: 0,
+      right: 0,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      backgroundColor: '#ffffff',
+      width: Dimensions.get('window').width,
+      height:  100, 
+    zIndex: 1000,   
+  },
     modalStyleSub: {
       flexDirection: 'row',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
+      padding: 30,
+      alignItems: 'center',
     },
     modalFullScreen: {
-      height: '100%',
-      width: '100%',
-      backgroundColor: '#000000',
-      justifyContent: 'center',
-      alignItems: 'center',
+      position: "absolute", // Đặt vị trí của modal
+      width: "100%", // Kích thước full màn hình
+      height: "100%", // Kích thước full màn hình
+      backgroundColor: '#000', // Màu nền của modal
+      // Các thiết lập khác cho modal full screen
+      // Đảm bảo rằng modal sẽ lấp đầy toàn bộ màn hình
     },
     modalNormal: {
       // Define kích thước và kiểu dáng cho modal khi không mở rộng fullscreen
       position: 'absolute',
       bottom: 0,
+      left: 0,
+      right: 0,
       width: '100%',
-      height: 50,
+      height: 5,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-end',
       backgroundColor: '#ffffff',
-      padding: 10,
       borderRadius: 8,
-      marginBottom: 10,
+   
     },
     
-    modalContent: {
-      backgroundColor: '#000',
-      padding: 20,
-      borderTopLeftRadius: 20,
-      borderTopRightRadius: 20,
-      color: '#000', // Thêm màu chữ cho modalContent
-      flexDirection: 'row',
-      zIndex:9999,
-      pointerEvents: 'auto'
-     
+    modalOverlay: {
+      position: 'absolute',
+      bottom: 0,
+      height: 100,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Màu nền trong suốt để tương tác với các thành phần phía sau
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex:0
     },
+    modalContainer: {
+      width: '100%',
+      backgroundColor: '#FFF',
+      height: "100%",
+      borderRadius: 10,
+      overflow: 'hidden', // Để tránh các vùng không mong muốn khi sử dụng borderRadius
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: '#FFF',
+      padding: 20,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    ListDanhSachPhat:{
+      margin: 20,
+      padding: 10,
+      width: "100%",
+      height: 50,
+      flexDirection: 'row',
+      justifyContent: "space-between"
+    },
+
    
       image: {
+      
         width: 50,
         height: 50,
         borderRadius: 8,
-        marginRight: 10,
+      
+      },
+      image1: {
+        marginTop: 20,
+        width: 250,
+        height: 250,
+        borderRadius: 8,
+      
       },
       details: {
         flex: 1,

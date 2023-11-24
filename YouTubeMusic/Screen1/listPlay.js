@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity , ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Image, Modal,FlatList, TouchableOpacity , ScrollView,PanResponder, Animated} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,7 +9,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AudioContext } from './AudioContext';
 import MiniPlay from './MiniPlay'
 import PlayPageModal from './PlayPageModal';
-import { Modal } from 'react-native-web';
 import { Audio } from 'expo-av';
 import { on } from 'events';
 
@@ -20,7 +19,7 @@ const listPlay = ({ navigation, route }) => {
     const [sound, setSound] = useState(null);
     const [playbackInstance, setPlaybackInstance] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false); // Thêm biến isPlaying
-    const[song, setSong]=useState(null);
+    // const[song, setSong]=useState(null);
     const openModalWithSong = (song) => {
         setSelectedSong(song); // Lưu thông tin bài hát được chọn
         setModalVisible(true); // Hiển thị Modal
@@ -151,7 +150,7 @@ const listPlay = ({ navigation, route }) => {
             console.error('Invalid song URL');
         }
     };
-
+    
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -211,7 +210,7 @@ const listPlay = ({ navigation, route }) => {
                     </FlatList>
                 </View>
                 <View>
-                {selectedSong && (
+                  {selectedSong && (
                     <View style = {styles.modalWrapper}>
                         <PlayPageModal
                     visible={modalVisible}
@@ -258,6 +257,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#000',
         height: 10000,
+        zIndex: 1,
+        position: 'relative',
 
     },
     View1: {
@@ -341,6 +342,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         backgroundColor: '#000',
+        zIndex:999
     },
     name_Song_Style: {
         color: '#fff',
@@ -378,4 +380,25 @@ const styles = StyleSheet.create({
         bottom: 0,
         zIndex: 999, // Đặt zIndex cao để modal hiển thị trên top
     },
+    modalOverlay: {
+        position: 'absolute',
+        bottom: 0,
+        height: 100,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Màu nền trong suốt để tương tác với các thành phần phía sau
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex:0
+      },
+      modalContainer: {
+        width: '80%',
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        overflow: 'hidden', // Để tránh các vùng không mong muốn khi sử dụng borderRadius
+      },
+      modalContent: {
+        backgroundColor: '#FFF',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+      },
 })

@@ -10,6 +10,7 @@ import * as React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { AudioProvider } from './Screen1/AudioContext';
 import listPlay from "./Screen1/listPlay";
+import PlayPageModal from "./Screen1/PlayPageModal";
 const Tab = createBottomTabNavigator();
 
 
@@ -90,6 +91,7 @@ export default function App() {
             ),
           }}
         ></Tab.Screen>
+       
       </Tab.Navigator>
     </NavigationContainer>
 </AudioProvider>
