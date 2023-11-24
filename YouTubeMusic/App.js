@@ -9,6 +9,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { AudioProvider } from './Screen1/AudioContext';
+import listPlay from "./Screen1/listPlay";
 const Tab = createBottomTabNavigator();
 
 
@@ -62,6 +63,21 @@ export default function App() {
         <Tab.Screen
           name={"Library"}
           component={LibraryScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View>
+                <MaterialIcons
+                  name="library-music"
+                  size={24}
+                  color={focused ? "white" : "grey"}
+                />
+              </View>
+            ),
+          }}
+        ></Tab.Screen>
+        <Tab.Screen
+          name={"listPlay"}
+          component={listPlay}
           options={{
             tabBarIcon: ({ focused }) => (
               <View>
