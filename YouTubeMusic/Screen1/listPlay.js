@@ -145,19 +145,20 @@ const listPlay = ({ navigation, route }) => {
 
                 </FlatList>
             </View>
-            <PlayPageModal
+            {/* <PlayPageModal
                 visible={modalVisible}
                 song={selectedSong}
                 onClose={() => setModalVisible(false)} // Đóng Modal khi cần
                 onPlay={onPlay}
-            />
-            {/* {selectedSong && (
+            /> */}
+            {selectedSong && (
                 <PlayPageModal
-                    visible={modalVisible}
-                    song={selectedSong}
-                    onClose={() => setModalVisible(false)}
+              
+                song={selectedSong}
+                onClose={() => setModalVisible(false)} // Đóng Modal khi cần
+                   
                 />
-            )} */}
+            )}
 
             {/* Hiển thị MiniPlay nếu có thông tin bài hát */}
             {/* {currentSong && <MiniPlay currentSong={currentSong} />} */}
