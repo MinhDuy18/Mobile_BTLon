@@ -9,7 +9,7 @@ import {View} from "react-native";
 import React, { createContext, useContext, useState } from "react";
 import PlayList from "./components/PlayList";
 import MiniPlay from "./components/MiniPlayer";
-import { SongProvider } from "./components/SongContext";
+import { SongProvider, useSong } from "./components/SongContext";
 const Tab = createBottomTabNavigator();
 
 const BottomTabOptions = {
@@ -24,7 +24,8 @@ const BottomTabOptions = {
 };
 const Context = createContext();
 export default function App() {
-  const [selectedSong, setSelectedSong] = useState(null);
+  // const [selectedSong, setSelectedSong] = useState(null);
+  // const [selectedSong] = useSong();
   const songInit = {
     id: 2,
     title: "json-server",
@@ -37,7 +38,7 @@ export default function App() {
     genres: ["Energy"],
   };
 
-  const [song, setSong] = useState({});
+  const [song, setSong] = useState({songInit});
   function changeSong(song) {
     setSong(song);
     console.log("bai hat " + song);

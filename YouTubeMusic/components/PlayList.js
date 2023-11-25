@@ -118,8 +118,8 @@ const PlayList = ({ navigation, route }) => {
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={() => {
-                            setSelectedSong(item); // Lưu thông tin bài hát được chọn
-                            handleSongSelect(item);
+                          // Lưu thông tin bài hát được chọn
+                             handleSongSelect(item);
                           
                         }}>
                             <View style={styles.song_Style}>
