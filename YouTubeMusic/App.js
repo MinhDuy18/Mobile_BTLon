@@ -28,7 +28,7 @@ const screenOptions = {
 export default function App() {
   return (
 
-        <AudioProvider>
+     
     <NavigationContainer>
       <Tab.Navigator screenOptions={screenOptions}>
         <Tab.Screen
@@ -94,7 +94,7 @@ export default function App() {
        
       </Tab.Navigator>
     </NavigationContainer>
-</AudioProvider>
+
 
   );
 }
