@@ -7,7 +7,9 @@ import { Foundation } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import {View} from "react-native";
 import React, { createContext, useContext, useState } from "react";
+import PlayList from "./components/PlayList";
 import MiniPlay from "./components/MiniPlayer";
+import { SongProvider } from "./components/SongContext";
 const Tab = createBottomTabNavigator();
 
 const BottomTabOptions = {
@@ -22,6 +24,7 @@ const BottomTabOptions = {
 };
 const Context = createContext();
 export default function App() {
+  const [selectedSong, setSelectedSong] = useState(null);
   const songInit = {
     id: 2,
     title: "json-server",
@@ -34,13 +37,14 @@ export default function App() {
     genres: ["Energy"],
   };
 
-  const [song, setSong] = useState(songInit);
+  const [song, setSong] = useState({});
   function changeSong(song) {
     setSong(song);
     console.log("bai hat " + song);
   }
   return (
-    <Context.Provider value={changeSong}>
+    <SongProvider>
+      <Context.Provider value={changeSong}>
       <NavigationContainer>
         <Tab.Navigator screenOptions={BottomTabOptions}>
           <Tab.Screen
@@ -88,10 +92,26 @@ export default function App() {
               ),
             }}
           ></Tab.Screen>
+          <Tab.Screen
+            name={"PlayList"}
+            component={PlayList}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <View>
+                  <MaterialIcons
+                    name="library-music"
+                    size={24}
+                    color={focused ? "white" : "grey"}
+                  />
+                </View>
+              ),
+            }}
+          ></Tab.Screen>
         </Tab.Navigator>
         <MiniPlay song={song}/>
       </NavigationContainer>
     </Context.Provider>
+    </SongProvider>
   );
 }
 export function useChangeSong() {

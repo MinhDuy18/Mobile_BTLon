@@ -3,15 +3,17 @@ import { Text, View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import axios from 'axios';
-const PlayPageModal = ({ visible, song}) => {
+import { useSong } from './SongContext';
+const PlayPageModal = ({ visible}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [sound, setSound] = useState(null);
   const [data, setData] = useState([]);
-  const [songPlaying, setSongPlaying] = useState(song);
-  console.log(songPlaying.mp3);
-  if (!song) {
-    return null; // Không hiển thị gì nếu không có bài hát đang phát
-  }
+  const songContext = useSong();
+  const selectedSong = songContext.selectedSong;
+  const [songPlaying, setSongPlaying] = useState(selectedSong);
+  
+ 
+  // console.log(songPlaying.mp3);
   useEffect(() => {
     const fetchData = async () => {
         try {
@@ -57,15 +59,16 @@ console.log(data);
       console.error('Error stopping audio: ', error);
     }
   };
-  useEffect(() => {
-    if (songPlaying && songPlaying !== song) {
-      stopAndUnload();
-      setSongPlaying(song);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [song]);
+  if(!selectedSong) return null;
+  // useEffect(() => {
+  //   if (songPlaying && songPlaying !== song) {
+  //     stopAndUnload();
+  //     setSongPlaying(song);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [song]);
   const handlePlay = () => {
-    playSelectedSong(songPlaying.mp3);
+    playSelectedSong(selectedSong.mp3);
   };
   const pauseAudio = async () => {
     if (sound) {
@@ -82,44 +85,44 @@ console.log(data);
       }
     }
   };
-  const onClose = () => {
-    stopAndUnload();
-    setSongPlaying(null);
-  };
-  const playNextSong = () => {
-    const index = data.findIndex((item) => item.id === songPlaying.id);
-    if (index < data.length - 1) {
-      setSongPlaying(data[index + 1]);
-      stopAndUnload();
-      handlePlay();
-    } else {
-      setSongPlaying(data[0]);
-      stopAndUnload();
-      handlePlay();
-    }
-  };
-  const playPreviousSong = () => {
-      const index = data.findIndex((item) => item.id === songPlaying.id);
-      if (index > 0) {
-        setSongPlaying(data[index - 1]);
-        stopAndUnload();
-        handlePlay();
-      } else {
-        setSongPlaying(data[data.length - 1]);
-        stopAndUnload();
-        handlePlay();
-      }
+  // const onClose = () => {
+  //   stopAndUnload();
+  //   setSongPlaying(null);
+  // };
+  // const playNextSong = () => {
+  //   const index = data.findIndex((item) => item.id === songPlaying.id);
+  //   if (index < data.length - 1) {
+  //     setSongPlaying(data[index + 1]);
+  //     stopAndUnload();
+  //     handlePlay();
+  //   } else {
+  //     setSongPlaying(data[0]);
+  //     stopAndUnload();
+  //     handlePlay();
+  //   }
+  // };
+  // const playPreviousSong = () => {
+  //     const index = data.findIndex((item) => item.id === songPlaying.id);
+  //     if (index > 0) {
+  //       setSongPlaying(data[index - 1]);
+  //       stopAndUnload();
+  //       handlePlay();
+  //     } else {
+  //       setSongPlaying(data[data.length - 1]);
+  //       stopAndUnload();
+  //       handlePlay();
+  //     }
 
-  };
+  // };
   return (
       <TouchableOpacity style={styles.container} >
-       <Image style={styles.image} source={{ uri: songPlaying.image }} />
+       <Image style={styles.image} source={{ uri: selectedSong.image }} />
        <View style={styles.details}>
-         <Text style={styles.songName}>{songPlaying.name}</Text>
-         <Text style={styles.artist}>{songPlaying.singer}</Text>
+         <Text style={styles.songName}>{selectedSong.name}</Text>
+         <Text style={styles.artist}>{selectedSong.singer}</Text>
        </View>
        <View style = {{width: 100, flexDirection: "row", justifyContent:"space-around"}}>
-          <TouchableOpacity onPress={playPreviousSong}>
+          <TouchableOpacity >
                <AntDesign name="stepbackward" size={24} color="black" />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -130,7 +133,7 @@ console.log(data);
                     onPress={ isPlaying ? pauseAudio : handlePlay}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={playNextSong}>
+          <TouchableOpacity >
               <AntDesign name="stepforward" size={24} color="black" />
           </TouchableOpacity>
        </View>

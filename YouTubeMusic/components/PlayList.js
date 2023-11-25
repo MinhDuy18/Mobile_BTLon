@@ -6,22 +6,27 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AudioContext } from './AudioContext';
-import MiniPlay from './MiniPlay'
+import { useSong } from './SongContext';
+// import { AudioContext } from './AudioContext';
+// import MiniPlay from './MiniPlay'
 import PlayPageModal from './MiniPlayer';
-import { Modal } from 'react-native-web';
-const listPlay = ({ navigation, route }) => {
+import { Modal, ScrollView } from 'react-native-web';
+const PlayList = ({ navigation, route }) => {
     const [data, setData] = useState([]);
-    const [selectedSong, setSelectedSong] = useState(null);
+    // const [selectedSong, setSelectedSong] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
-
+    const{setSelectedSong}=useSong();
+  const handleSongSelect = (song) => {
+    setSelectedSong(song);
+    console.log(song);
+  };
     const openModalWithSong = (song) => {
         setSelectedSong(song); // Lưu thông tin bài hát được chọn
         setModalVisible(true); // Hiển thị Modal
 
     };
-    const audioContext = useContext(AudioContext);
-    const { isPlaying, setIsPlaying, setAudioURL } = audioContext;
+    // const audioContext = useContext(AudioContext);
+    // const { isPlaying, setIsPlaying, setAudioURL } = audioContext;
     // useEffect(() => {
     //     if (isPlaying) {
     //         pause();
@@ -63,15 +68,6 @@ const listPlay = ({ navigation, route }) => {
     //     //    console.log(selectedSong);
     //     // }
     // }, [selectedSong]);
-    const onPlay = () => {
-        if (selectedSong) {
-            setAudioURL(selectedSong.url); // Đặt URL của bài hát được chọn để phát nhạc
-            setIsPlaying(true); // Phát nhạc khi Bottom Modal hiển thị
-            setModalVisible(false); // Đóng Modal khi bắt đầu phát nhạc
-        } else {
-          console.error('Invalid song URL'); // Log lỗi nếu URL không hợp lệ
-        }
-      };
     const playRandomSong = () => {
         if (data.length > 0) {
             const randomIndex = Math.floor(Math.random() * data.length);
@@ -87,10 +83,10 @@ const listPlay = ({ navigation, route }) => {
             });
         }
     };
-    console.log('Selected Song:', selectedSong);
 
     return (
-        <View style={styles.container}>
+        <ScrollView>
+            <View style={styles.container}>
             <View style={styles.View1}>
                 <View style={styles.Img_Style}>
                     <Image style={styles.img_name_list} source={require('../img/Song1.png')} ></Image>
@@ -105,7 +101,7 @@ const listPlay = ({ navigation, route }) => {
                 </View>
             </View>
             <View style={styles.buttom_Style}>
-                <TouchableOpacity onPress={playRandomSong}>
+                <TouchableOpacity>
                     <View style={styles.butomNext}>
                         <AntDesign name="swap" size={24} color="#000" />
                         <Text style={styles.text_bottomNext}>Trộn bài</Text>
@@ -123,8 +119,8 @@ const listPlay = ({ navigation, route }) => {
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={() => {
                             setSelectedSong(item); // Lưu thông tin bài hát được chọn
-                            setModalVisible(true);
-                            //    openModalWithSong(item);
+                            handleSongSelect(item);
+                          
                         }}>
                             <View style={styles.song_Style}>
                                 <Image style={styles.img_Song_Style} resizeMode='contain' source={item.image}></Image>
@@ -145,12 +141,6 @@ const listPlay = ({ navigation, route }) => {
 
                 </FlatList>
             </View>
-            <PlayPageModal
-                visible={modalVisible}
-                song={selectedSong}
-                onClose={() => setModalVisible(false)} // Đóng Modal khi cần
-                onPlay={onPlay}
-            />
             {/* {selectedSong && (
                 <PlayPageModal
                     visible={modalVisible}
@@ -163,9 +153,10 @@ const listPlay = ({ navigation, route }) => {
             {/* {currentSong && <MiniPlay currentSong={currentSong} />} */}
 
         </View>
+        </ScrollView>
     )
 }
-export default listPlay;
+export default PlayList;
 const styles = StyleSheet.create({
 
     container: {

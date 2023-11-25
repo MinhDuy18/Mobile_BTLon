@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  Alert,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,6 +16,7 @@ import MixedCard from "../components/MixedCard";
 import FilterSong from "../components/FilterSong";
 import { Avatar } from "react-native-paper";
 import MagnifyModal from "../components/MagnifyModal";
+import { useSong } from "../components/SongContext";
 export default function HomeScreen() {
   const filter_list = [
     "Energy",
@@ -33,6 +35,10 @@ export default function HomeScreen() {
   const [visible, setVisible] = useState(false);
   const [songForYou, setSongForYou] = useState([]);
   const numColumns = 6;
+  const{setSelectedSong}=useSong();
+  const handleSongSelect = (song) => {
+    setSelectedSong(song);
+  };
   useEffect(() => {
     fetch("http://localhost:3000/song")
       .then((response) => response.json())
@@ -116,6 +122,7 @@ export default function HomeScreen() {
             <FilterCard
               item={item}
               onFilter={() => setFilter(item)}
+              
               key={item}
             />
           ))}
@@ -164,7 +171,12 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             data={songs}
             renderItem={({ item, index }) => (
-              <ListenAgain item={item} key={index} />
+              <TouchableOpacity >
+                   <ListenAgain item={item} key={index}/>
+                  
+              </TouchableOpacity>
+             
+             
             )}
           />
         </ScrollView>
@@ -187,6 +199,7 @@ export default function HomeScreen() {
           numColumns={1}
           data={mixed}
           renderItem={({ item, index }) => (
+            
             <MixedCard item={item} key={index} />
           )}
         ></FlatList>
