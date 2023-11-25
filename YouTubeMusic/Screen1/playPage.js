@@ -11,7 +11,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import axios from 'axios';
 import Slider from '@react-native-community/slider';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from "react-native-web";
 import { AudioContext } from "./AudioContext";
 

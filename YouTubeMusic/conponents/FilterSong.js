@@ -2,7 +2,6 @@ import { StyleSheet, Text, View,Image,TouchableOpacity,ScrollView,FlatList} from
 import React from 'react'
 
 const FilterSong = ({items}) => {
-    console.log(items)
   return (
     <ScrollView
     horizontal

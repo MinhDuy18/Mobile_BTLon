@@ -15,6 +15,7 @@ import MixedCard from "../conponents/MixedCard";
 import FilterSong from "../conponents/FilterSong";
 import { Avatar } from "react-native-paper";
 import MagnifyModal from "../conponents/MagnifyModal";
+import { useChangeSong } from "../App";
 export default function HomeScreen() {
   const filter_list = [
     "Energy",
@@ -33,6 +34,8 @@ export default function HomeScreen() {
   const [visible, setVisible] = useState(false);
   const [songForYou, setSongForYou] = useState([]);
   const numColumns = 6;
+  const changeSong =useChangeSong();
+  
   useEffect(() => {
     fetch("http://localhost:3000/song")
       .then((response) => response.json())
@@ -121,6 +124,7 @@ export default function HomeScreen() {
           ))}
         </ScrollView>
       </View>
+{/* song for you */}
       <ScrollView>
         <View>
           <Text
@@ -134,7 +138,6 @@ export default function HomeScreen() {
           >
             {filter}
           </Text>
-{/* filter list  */}
             <FilterSong items={songForYou}/>
         </View>
 {/* listen again */}
@@ -164,7 +167,7 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             data={songs}
             renderItem={({ item, index }) => (
-              <ListenAgain item={item} key={index} />
+              <ListenAgain item={item} handlePress={changeSong} key={index} />
             )}
           />
         </ScrollView>
