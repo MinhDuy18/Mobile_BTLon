@@ -22,7 +22,7 @@ export default function App() {
   return (
 
 
-        <Tab.Navigator screenOptions={BottomTabOptions}>
+        <Tab.Navigator screenOptions={BottomTabOptions} initialRouteName="Home">
           <Tab.Screen
             name={"Home"}
             component={HomeScreen}

@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View ,TouchableOpacity,Image} from 'react-native'
+import { StyleSheet, View ,TouchableOpacity,Image} from 'react-native'
 import React from 'react'
 import { Avatar } from "react-native-paper";
-const Header = ({setVisileModalSearch}) => {
+const Header = ({setVisileModalSearch,avatar}) => {
   return (
     <View>
               <View
@@ -44,7 +44,7 @@ const Header = ({setVisileModalSearch}) => {
             <TouchableOpacity
               style={{ justifyContent: "center", alignItems: "center" }}
             >
-              <Avatar.Image size={26} source={require("../img/avt.png")} />
+              <Avatar.Image size={26} source={avatar} />
             </TouchableOpacity>
           </View>
         </View>

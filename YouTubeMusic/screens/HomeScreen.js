@@ -18,6 +18,7 @@ import MagnifyModal from "../components/MagnifyModal";
 import { useSong } from "../components/SongContext";
 import Header from "../components/Header";
 import PlayList from "../components/PlayList";
+import { useAccount } from "../components/AccountContext";
 
 export default function HomeScreen() {
   const filter_list = [
@@ -38,10 +39,10 @@ export default function HomeScreen() {
   const [songForYou, setSongForYou] = useState([]);
   const [mixed, setMixed] = useState([]);
   const[playList,setPlayList]=useState({});
+  const {avatar} = useAccount();
   const { setSelectedSong } = useSong();
   function handleSongSelect(song) {
     setSelectedSong(song);
-    console.log("handleSong id: " + song.id);
   }
 
 
@@ -77,7 +78,7 @@ export default function HomeScreen() {
       style={{ flex: 1 }}
     >
       <View>
-        <Header setVisileModalSearch={setVisibleModalSearch} />
+        <Header setVisileModalSearch={setVisibleModalSearch} avatar={avatar} />
         {/* filter */}
         <ScrollView horizontal={true} showsVerticalScrollIndicator>
           {filter_list.map((item) => (
