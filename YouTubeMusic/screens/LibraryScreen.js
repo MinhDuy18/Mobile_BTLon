@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { Avatar } from "react-native-paper";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign } from '@expo/vector-icons';
 import { useAccount } from "../components/AccountContext";
 const LibraryScreen = () => {
   const { avatar } = useAccount();
@@ -22,29 +22,51 @@ const LibraryScreen = () => {
   ];
   return (
     <View style={{ width: "100%", height: "100%", backgroundColor: "black" }}>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 64,
-          paddingLeft: 16,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text style={{ fontSize: 24, color: "white" }}>My Library</Text>
-        <AntDesign name="down" size={24} color="black" />
-        <TouchableOpacity style={{ alignItems: "flex-end" }}>
-          <Image
-            source={require("../img/search.png")}
-            style={{ width: 30, height: 30 }}
-          ></Image>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ justifyContent: "center", alignItems: "center" }}
+  <View>
+              <View
+          style={{
+            flexDirection: "row",
+            height: 64,
+            paddingLeft: 16,
+            alignItems: "center",
+          }}
         >
-          <Avatar.Image size={26} source={avatar} style={{}}/>
-        </TouchableOpacity>
-      </View>
+          <View>
+            <Image
+              source={require("../img/YMusicLogo.svg")}
+              style={{
+                height: 24,
+                width: 80,
+                resizeMode: "contain",
+              }}
+            ></Image>
+          </View>
+          <View
+            style={{
+              width: 244,
+              paddingRight: 30,
+              justifyContent: "center",
+              alignItems: "flex-end",
+            }}
+          >
+            <TouchableOpacity
+              style={{ alignItems: "flex-end" }}
+            >
+              <Image
+                source={require("../img/search.png")}
+                style={{ width: 30, height: 30 }}
+              ></Image>
+            </TouchableOpacity>
+          </View>
+          <View style={{ width: 54, paddingRight: 20 }}>
+            <TouchableOpacity
+              style={{ justifyContent: "center", alignItems: "center" }}
+            >
+              <Avatar.Image size={26} source={avatar} />
+            </TouchableOpacity>
+          </View>
+        </View>
+    </View>
       <View>
         <ScrollView horizontal={true} showsVerticalScrollIndicator>
           {filter_list.map((item) => (
@@ -76,10 +98,7 @@ const LibraryScreen = () => {
         </ScrollView>
       </View>
       <View>
-        <Image
-          source={require("../img/lib.png")}
-          style={{ width: 258, height: 262 }}
-        ></Image>
+            <Image source={require('../img/lib.png')} style={{width:258,height:262}}></Image>
       </View>
     </View>
   );
@@ -87,4 +106,6 @@ const LibraryScreen = () => {
 
 export default LibraryScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+
+});

@@ -13,7 +13,7 @@ export default function App() {
     <AccountProvider>
       <SongProvider>
           <NavigationContainer>
-            <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="BottomTab">
+            <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Login">
               <Stack.Screen name="BottomTab" component={BottomTab} />
               <Stack.Screen name="Login" component={LoginScreen} />
             </Stack.Navigator>
