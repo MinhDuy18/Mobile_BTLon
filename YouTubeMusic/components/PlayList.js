@@ -73,14 +73,8 @@ const PlayList = ({ navigation, route }) => {
             const randomIndex = Math.floor(Math.random() * data.length);
             const randomSong = data[randomIndex];
             // Chuyển hướng đến trang phát nhạc với bài hát ngẫu nhiên được chọn
-            navigation.navigate('playPage', {
-                name: randomSong.name,
-                singer: randomSong.singer,
-                image: randomSong.image,
-                duration: randomSong.duration,
-                url: randomSong.mp3,
-                id: randomSong.id,
-            });
+            setSelectedSong(randomSong);
+            console.log(randomSong);
         }
     };
 
@@ -101,7 +95,7 @@ const PlayList = ({ navigation, route }) => {
                 </View>
             </View>
             <View style={styles.buttom_Style}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={playRandomSong}>
                     <View style={styles.butomNext}>
                         <AntDesign name="swap" size={24} color="#000" />
                         <Text style={styles.text_bottomNext}>Trộn bài</Text>

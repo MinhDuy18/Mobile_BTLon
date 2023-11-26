@@ -6,49 +6,79 @@ import axios from 'axios';
 import Slider from '@react-native-community/slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSong } from './SongContext';
+import useAudioPlayer from './UseAudioProvider';
 const PlayPageModal = ({ visible}) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  // const [isPlaying, setIsPlaying] = useState(false);
   const [sound, setSound] = useState(null);
   const [data, setData] = useState([]);
   const songContext = useSong();
-  const {setSelectedSong} = useSong();
-  const selectedSong = songContext.selectedSong;
+  // const {setSelectedSong} = useSong();
+  // const selectedSong = songContext.selectedSong;
+  const {setSelectedSong, selectedSong} = songContext;
   const [songPlaying, setSongPlaying] = useState(selectedSong);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [playedTime, setPlayedTime] = useState(0);
-  const [remainingTime, setRemainingTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-    const [currentPosition, setCurrentPosition] = useState(0);
-
+  // const [visibleModal, setVisibleModal] = useState(false);
+  const { isPlaying,currentPosition,onPlaybackStatusUpdate, setCurrentPosition, setIsPlaying , duration, playedTime, remainingTime, setDuration, setPlayedTime, setRemainingTime} = useAudioPlayer();
+  useEffect(() => {
+    if (selectedSong) {
+      setDuration(selectedSong.duration || 0); // Cập nhật duration từ selectedSong
+    }
+  }, [selectedSong]);   
+  // Sử dụng các giá trị trả về từ audioPlayer ở đây
   const handleUpButtonPress = () => {
     setIsExpanded(!isExpanded); // Đảo ngược trạng thái khi nút "up" được ấn
   };
+// 
+
   const handleSongSelect = (song) => {
     setSelectedSong(song);
     console.log(song);
   };
- 
+
   // console.log(songPlaying.mp3);
   useEffect(() => {
-    const fetchData = async () => {
-        try {
-            const response = await axios.get('http://localhost:3000/song');
-            setData(response.data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+    if ((songPlaying && songPlaying !== selectedSong) || !sound) {
+      stopAndUnload();
+      setSongPlaying(selectedSong);
+    }
+  }, [selectedSong, songPlaying, sound]);
 
+  useEffect(() => {
+    if (isPlaying) {
+      const interval = setInterval(() => {
+        if (currentPosition !== undefined) {
+          setPlayedTime(currentPosition);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isPlaying, currentPosition]);
+  
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/song');
+        setData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
     fetchData();
-}, []);
-useEffect(() => {
-  if ((songPlaying && songPlaying !== selectedSong) || !sound) {
-    stopAndUnload();
-    // setIsPlaying(true);
-    setSongPlaying(selectedSong);
-   
-  }
-}, [selectedSong, songPlaying, sound]);
+  }, []);
+  
+  // useEffect(() => {
+  //   if (isPlaying) {
+  //     const interval = setInterval(() => {
+  //       setPlayedTime(currentPosition);
+  //     }, 1000);
+  
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [isPlaying, currentPosition]);
 // useEffect(() => {
 //   if (isPlaying) {
 //     playSelectedSong(selectedSong.mp3);
@@ -56,26 +86,32 @@ useEffect(() => {
 // }, [selectedSong]);
 
 console.log(data);
-  const playSelectedSong = async (songURL) => {
-    try {
-      if (!sound) {
-        const { sound: audioSound } = await Audio.Sound.createAsync({ uri: songURL });
-        setSound(audioSound);
-        await audioSound.playAsync();
-        setIsPlaying(true);
-      } else {
-        if (isPlaying) {
-          await sound.pauseAsync();
-          setIsPlaying(false);
-        } else {
-          await sound.playAsync();
-          setIsPlaying(true);
-        }
+const playSelectedSong = async (songURL) => {
+  try {
+    if (!sound) {
+      const { sound: audioSound } = await Audio.Sound.createAsync({ uri: songURL });
+      setSound(audioSound);
+      await audioSound.playAsync();
+      setIsPlaying(true);
+      audioSound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+      const status = await audioSound.getStatusAsync();
+      if (status.isLoaded) {
+        setDuration(status.durationMillis / 1000);
       }
-    } catch (error) {
-      console.error('Error playing audio: ', error);
+    } else {
+      if (isPlaying) {
+        await sound.pauseAsync();
+        setIsPlaying(false);
+      } else {
+        await sound.playAsync();
+        setIsPlaying(true);
+      }
     }
-  };
+  } catch (error) {
+    console.error('Error playing audio: ', error);
+  }
+};
+
   const stopAndUnload = async () => {
     try {
       if (sound) {
@@ -110,6 +146,7 @@ console.log(data);
       }
     }
   };
+  
   const playNextSong = () => {
     const index = data.findIndex((item) => item.id === songPlaying.id);
     if (index < data.length - 1) {
@@ -165,14 +202,20 @@ console.log(data);
     }
 };
 
+// Cập nhật thời gian hiện tại và thời lượng của bài hát
+
+
+
 const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
+// Trước khi gán giá trị mới cho playedTime, kiểm tra xem giá trị có tồn tại không
 const handleSliderChange = (value) => {
-  setPlayedTime(value);
+    setPlayedTime(value);
 };
+
 const handleSliderComplete = async (value) => {
   if (sound) {
       await sound.setPositionAsync(value * 1000); // Chuyển đổi giây thành mili giây
@@ -213,9 +256,11 @@ const handleSliderComplete = async (value) => {
       <TouchableOpacity onPress={handleUpButtonPress}>
            <AntDesign name="up" size={24} color="black" />
       </TouchableOpacity>
-      <Modal visible={isExpanded} transparent animationType="slide">
-        <TouchableOpacity style={styles.expandedContainer} onPress={handleUpButtonPress}>
-        <AntDesign name="down" size={24} color="black" />
+      <Modal visible={isExpanded} transparent animationType='slide'>
+        <TouchableOpacity style={styles.expandedContainer}>
+        <TouchableOpacity onPress={handleUpButtonPress}>
+             <AntDesign name="down" size={24} color="black" />
+        </TouchableOpacity>
             <View style = {styles.ModalContainer}>
                <Image style = {{width:300, height:300}} resizeMode='contain' source={selectedSong.image}></Image>
             </View>
@@ -229,20 +274,17 @@ const handleSliderComplete = async (value) => {
             </View>
             <View style={styles.audioBar}>
            
-           <Slider
-               
-              //  style={{ width: '100%', height: 40 }}
-              //  minimumValue={0}
-              //  maximumValue={selectedSong.duration}
-              //  value={playedTime} // Thay đổi từ currentPosition sang playedTime
-              //  minimumTrackTintColor="#000000"
-              //  maximumTrackTintColor="#FFFFFF"
-              //  onSlidingComplete={handleSliderComplete}
-              //  onValueChange={handleSliderChange}
+            <Slider
+              style={{ width: '100%', height: 40 }}
+              minimumValue={0}
+              maximumValue={duration}
+              value={playedTime} // Giá trị của thanh trượt phải được liên kết với playedTime
+              minimumTrackTintColor="#000000"
+              maximumTrackTintColor="#FFFFFF"
+              onSlidingComplete={handleSliderComplete}
+              onValueChange={handleSliderChange}
+            />
 
-               
-            
-           />
            </View>
            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 46, marginBottom: 5 }}>
                <Text style={styles.timeText}>{formatTime(currentPosition)}</Text>
