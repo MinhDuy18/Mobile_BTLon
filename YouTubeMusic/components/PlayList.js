@@ -19,6 +19,11 @@ const PlayList = ({route}) => {
      setSelectedSong(song);
      console.log("handleSong id: " + song.id);
    }
+   const handleRandomSong = () => {
+        const randomIndex = Math.floor(Math.random() * playList.length);
+        const randomSong = playList[randomIndex];
+        handleSongSelect(randomSong);
+}
 
     return (
         <ScrollView>
@@ -37,7 +42,7 @@ const PlayList = ({route}) => {
                 </View>
             </View>
             <View style={styles.buttom_Style}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleRandomSong}>
                     <View style={styles.butomNext}>
                         <AntDesign name="swap" size={24} color="#000" />
                         <Text style={styles.text_bottomNext}>Trộn bài</Text>

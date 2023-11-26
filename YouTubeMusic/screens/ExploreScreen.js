@@ -6,9 +6,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
+import { useSong } from '../components/SongContext';
 
 const explorePage = () => {
   const [data, setData] = useState([]);
+  const { setSelectedSong } = useSong();
+  const handleSongSelect = (song) => {
+    setSelectedSong(song);
+    console.log(song);
+    };
   useEffect(() => {
     const fetchData = async () => {
         try {
@@ -50,15 +56,10 @@ const dataToShow = data.slice(0, 4);
                       <FlatList data={dataToShow}
                           keyExtractor={(item) => item.id.toString()}
                           renderItem={({ item }) => (
-                              // <TouchableOpacity onPress={() => {
-                              //     setSelectedSong(item); // Lưu thông tin bài hát được chọn
-                              //     setModalVisible(true);
-                              //     playSelectedSong(item.mp3)
-                              //     // onPlay();
-                              //     // alert(item.name)
-                              //     // alert(item.mp3)
-                              //     //openModalWithSong(item);
-                              //  }}>
+                               <TouchableOpacity onPress={() => {
+                                handleSongSelect(item);
+                             
+                                }}>
                                   <View style={styles.song_Style}>
                                       <Image style={styles.img_Song_Style} resizeMode='contain' source={item.image}></Image>
                                       <View style={styles.Resize_Text} >
@@ -70,7 +71,7 @@ const dataToShow = data.slice(0, 4);
                                       </View>
                                       <Ionicons name="ellipsis-vertical-sharp" size={24} color="#fff" />
                                   </View>
-                              // </TouchableOpacity>
+                               </TouchableOpacity>
                           )}
                           initialNumToRender={4}
                           maxToRenderPerBatch={4}
