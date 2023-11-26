@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  Alert,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
@@ -13,8 +14,10 @@ import FilterCard from "../components/FilterCard";
 import ListenAgain from "../components/ListenAgain";
 import MixedCard from "../components/MixedCard";
 import FilterSong from "../components/FilterSong";
-import { Avatar } from "react-native-paper";
 import MagnifyModal from "../components/MagnifyModal";
+import { useSong } from "../components/SongContext";
+import Header from "../components/Header";
+import PlayList from "../components/PlayList";
 export default function HomeScreen() {
   const filter_list = [
     "Energy",
@@ -28,11 +31,18 @@ export default function HomeScreen() {
     "Sleep",
   ];
   const [filter, setFilter] = useState("");
-  // listen again
   const [songs, setSongs] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [visibleModalSearch, setVisibleModalSearch] = useState(false);
+  const[visibleModalPlaylist,setVisibleModalPlaylist]=useState(true);
   const [songForYou, setSongForYou] = useState([]);
-  const numColumns = 6;
+  const [mixed, setMixed] = useState([]);
+  const[playList,setPlayList]=useState({});
+  const { setSelectedSong } = useSong();
+  function handleSongSelect(song) {
+    setSelectedSong(song);
+    console.log("handleSong id: " + song.id);
+  }
+
   useEffect(() => {
     fetch("http://localhost:3000/song")
       .then((response) => response.json())
@@ -40,6 +50,13 @@ export default function HomeScreen() {
         setSongs(json);
       });
   }, []);
+  useEffect(() => {
+    fetch("http://localhost:3001/albums")
+      .then((response) => response.json())
+      .then((json) => {
+        setMixed(json);
+      });
+  },[]);
   useEffect(onFilter, [filter]);
   function onFilter() {
     var list = songs.filter((item) => item.genres.includes(filter));
@@ -49,14 +66,6 @@ export default function HomeScreen() {
     else if (list.length > 3) list = list.slice(0, 3);
     setSongForYou(list);
   }
-  const [mixed, setMixed] = useState([
-    { id: 1, name: "Pink Ponk", img: "image 1.png" },
-    { id: 2, name: "Pink Ponk", img: "image 1.png" },
-    { id: 3, name: "Pink Ponk", img: "image 1.png" },
-    { id: 4, name: "Pink Ponk", img: "image 1.png" },
-    { id: 5, name: "Pink Ponk", img: "image 1.png" },
-    { id: 6, name: "Pink Ponk", img: "image 1.png" },
-  ]);
   return (
     <LinearGradient
       colors={["#72374E", "#603772", "#0E0E0E"]}
@@ -66,51 +75,8 @@ export default function HomeScreen() {
       style={{ flex: 1 }}
     >
       <View>
-        <View
-          style={{
-            flexDirection: "row",
-            height: 64,
-            paddingLeft: 16,
-            alignItems: "center",
-          }}
-        >
-          <View>
-            <Image
-              source={require("../img/YMusicLogo.svg")}
-              style={{
-                height: 24,
-                width: 80,
-                resizeMode: "contain",
-              }}
-            ></Image>
-          </View>
-          <View
-            style={{
-              width: 244,
-              paddingRight: 30,
-              justifyContent: "center",
-              alignItems: "flex-end",
-            }}
-          >
-            <TouchableOpacity
-              style={{ alignItems: "flex-end" }}
-              onPress={() => setVisible(true)}
-            >
-              <Image
-                source={require("../img/search.png")}
-                style={{ width: 30, height: 30 }}
-              ></Image>
-            </TouchableOpacity>
-          </View>
-          <View style={{ width: 54, paddingRight: 20 }}>
-            <TouchableOpacity
-              style={{ justifyContent: "center", alignItems: "center" }}
-            >
-              <Avatar.Image size={26} source={require("../img/avt.png")} />
-            </TouchableOpacity>
-          </View>
-        </View>
-{/* filter */}
+        <Header setVisileModalSearch={setVisibleModalSearch} />
+        {/* filter */}
         <ScrollView horizontal={true} showsVerticalScrollIndicator>
           {filter_list.map((item) => (
             <FilterCard
@@ -121,78 +87,22 @@ export default function HomeScreen() {
           ))}
         </ScrollView>
       </View>
-      <ScrollView style={{marginBottom:55}}>
-        <View>
-          <Text
-            style={{
-              fontSize: 24,
-              fontStyle: "roboto",
-              color: "white",
-              fontWeight: "bold",
-              marginLeft: 16,
-            }}
-          >
-            {filter}
-          </Text>
-{/* filter list  */}
-            <FilterSong items={songForYou}/>
-        </View>
-{/* listen again */}
-        <Text
-          style={{
-            fontSize: 24,
-            fontStyle: "roboto",
-            color: "white",
-            fontWeight: "bold",
-            marginLeft: 16,
-          }}
-        >
-          Listen again
-        </Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          directionalLockEnabled={true}
-          alwaysBounceVertical={false}
-        >
-          <FlatList
-            key={"#"}
-            keyExtractor={(item) => "#" + item.id}
-            contentContainerStyle={{ alignSelf: "flex-start" }}
-            numColumns={numColumns}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            data={songs}
-            renderItem={({ item, index }) => (
-              <ListenAgain item={item} key={index} />
-            )}
-          />
-        </ScrollView>
-{/* mixed for you */}
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text
-            style={{
-              fontSize: 24,
-              fontStyle: "roboto",
-              color: "white",
-              fontWeight: "bold",
-              marginLeft: 16,
-            }}
-          >
-            Mixed for you
-          </Text>
-        </View>
-        <FlatList
-          horizontal
-          numColumns={1}
-          data={mixed}
-          renderItem={({ item, index }) => (
-            <MixedCard item={item} key={index} />
-          )}
-        ></FlatList>
+      <ScrollView style={{ marginBottom: 55 }}>
+        {/* filter list  */}
+        <FilterSong
+          items={songForYou}
+          filter={filter}
+          setSong={handleSongSelect}
+        />
+
+        {/* listen again */}
+        <ListenAgain items={songs} setSong={handleSongSelect} />
+        {/* mixed for you */}
+       <MixedCard items={mixed} setPlayList={setPlayList} setVisible={setVisibleModalPlaylist}/>
       </ScrollView>
-{/* magnify search */}
-      <MagnifyModal visible={visible} onClose={() => setVisible(false)} />
+      {/* magnify search */}
+      <MagnifyModal visible={visibleModalSearch} onClose={() => setVisibleModalSearch(false)} />
+      <PlayList visible={visibleModalPlaylist} onClose={() => setVisibleModalPlaylist(false)} playList={playList} setSong={handleSongSelect}/>
     </LinearGradient>
   );
 }

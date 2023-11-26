@@ -3,15 +3,21 @@ import { Text, View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import axios from 'axios';
-const PlayPageModal = ({ visible, song}) => {
+import { useSong } from './SongContext';
+const PlayPageModal = ({ visible}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [sound, setSound] = useState(null);
   const [data, setData] = useState([]);
-  const [songPlaying, setSongPlaying] = useState(song);
-  console.log(songPlaying.mp3);
-  if (!song) {
-    return null; // Không hiển thị gì nếu không có bài hát đang phát
-  }
+  const songContext = useSong();
+  const {setSelectedSong} = useSong();
+  const selectedSong = songContext.selectedSong;
+  const [songPlaying, setSongPlaying] = useState(selectedSong);
+  const handleSongSelect = (song) => {
+    setSelectedSong(song);
+    console.log(song);
+  };
+ 
+  // console.log(songPlaying.mp3);
   useEffect(() => {
     const fetchData = async () => {
         try {
@@ -24,7 +30,12 @@ const PlayPageModal = ({ visible, song}) => {
 
     fetchData();
 }, []);
-console.log(data);
+useEffect(() => {
+  if ((songPlaying && songPlaying !== selectedSong) || !sound) {
+    stopAndUnload();
+    setSongPlaying(selectedSong);
+  }
+}, [selectedSong, songPlaying, sound]);
   const playSelectedSong = async (songURL) => {
     try {
       if (!sound) {
@@ -57,15 +68,9 @@ console.log(data);
       console.error('Error stopping audio: ', error);
     }
   };
-  useEffect(() => {
-    if (songPlaying && songPlaying !== song) {
-      stopAndUnload();
-      setSongPlaying(song);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [song]);
+  if(!selectedSong) return null;
   const handlePlay = () => {
-    playSelectedSong(songPlaying.mp3);
+    playSelectedSong(selectedSong.mp3);
   };
   const pauseAudio = async () => {
     if (sound) {
@@ -82,18 +87,16 @@ console.log(data);
       }
     }
   };
-  const onClose = () => {
-    stopAndUnload();
-    setSongPlaying(null);
-  };
   const playNextSong = () => {
     const index = data.findIndex((item) => item.id === songPlaying.id);
     if (index < data.length - 1) {
-      setSongPlaying(data[index + 1]);
+      handleSongSelect(data[index + 1]);
+console.log(data[index + 1]);
+      console.log("1" + selectedSong);
       stopAndUnload();
       handlePlay();
     } else {
-      setSongPlaying(data[0]);
+      handleSongSelect(data[0]);
       stopAndUnload();
       handlePlay();
     }
@@ -101,11 +104,11 @@ console.log(data);
   const playPreviousSong = () => {
       const index = data.findIndex((item) => item.id === songPlaying.id);
       if (index > 0) {
-        setSongPlaying(data[index - 1]);
+        handleSongSelect(data[index - 1]);
         stopAndUnload();
         handlePlay();
       } else {
-        setSongPlaying(data[data.length - 1]);
+        handleSongSelect(data[data.length - 1]);
         stopAndUnload();
         handlePlay();
       }
@@ -113,10 +116,10 @@ console.log(data);
   };
   return (
       <TouchableOpacity style={styles.container} >
-       <Image style={styles.image} source={{ uri: songPlaying.image }} />
+       <Image style={styles.image} source={{ uri: selectedSong.image }} />
        <View style={styles.details}>
-         <Text style={styles.songName}>{songPlaying.name}</Text>
-         <Text style={styles.artist}>{songPlaying.singer}</Text>
+         <Text style={styles.songName}>{selectedSong.name}</Text>
+         <Text style={styles.artist}>{selectedSong.singer}</Text>
        </View>
        <View style = {{width: 100, flexDirection: "row", justifyContent:"space-around"}}>
           <TouchableOpacity onPress={playPreviousSong}>
@@ -134,8 +137,8 @@ console.log(data);
               <AntDesign name="stepforward" size={24} color="black" />
           </TouchableOpacity>
        </View>
-       <TouchableOpacity>
-            <AntDesign name="close" size={24} color="black" />
+       <TouchableOpacity >
+            <AntDesign name="up" size={24} color="black" />
        </TouchableOpacity>
       
        {/* Các icon hoặc control nhỏ như play/pause có thể được thêm vào đây */}
@@ -143,6 +146,7 @@ console.log(data);
   
   );
 };
+
 
 const styles = StyleSheet.create({
     // container: {
