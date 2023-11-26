@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image ,ScrollView,FlatList} from "react-native";
 import React from "react";
-
+import { useSong } from './SongContext';
 const ListenAgain = ({ items, setSong }) => {
   return (
     <View>
@@ -62,6 +62,8 @@ const ListenAgain = ({ items, setSong }) => {
           )}
         />
       </ScrollView>
+
+
     </View>
   );
 };

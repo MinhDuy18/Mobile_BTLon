@@ -19,6 +19,7 @@ const PlayList = ({route}) => {
      setSelectedSong(song);
      console.log("handleSong id: " + song.id);
    }
+
     return (
         <ScrollView>
             <View style={styles.container}>

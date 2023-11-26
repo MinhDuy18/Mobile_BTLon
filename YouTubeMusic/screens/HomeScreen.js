@@ -18,6 +18,7 @@ import MagnifyModal from "../components/MagnifyModal";
 import { useSong } from "../components/SongContext";
 import Header from "../components/Header";
 import PlayList from "../components/PlayList";
+
 export default function HomeScreen() {
   const filter_list = [
     "Energy",
@@ -42,6 +43,7 @@ export default function HomeScreen() {
     setSelectedSong(song);
     console.log("handleSong id: " + song.id);
   }
+
 
   useEffect(() => {
     fetch("http://localhost:3000/song")
@@ -82,6 +84,7 @@ export default function HomeScreen() {
             <FilterCard
               item={item}
               onFilter={() => setFilter(item)}
+              
               key={item}
             />
           ))}
@@ -99,6 +102,7 @@ export default function HomeScreen() {
         <ListenAgain items={songs} setSong={handleSongSelect} />
         {/* mixed for you */}
        <MixedCard items={mixed} setPlayList={setPlayList} setVisible={setVisibleModalPlaylist}/>
+
       </ScrollView>
       {/* magnify search */}
       <MagnifyModal visible={visibleModalSearch} onClose={() => setVisibleModalSearch(false)} />
