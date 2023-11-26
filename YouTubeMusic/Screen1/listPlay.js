@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+<<<<<<< Updated upstream:YouTubeMusic/Screen1/listPlay.js
 import { AudioContext } from './AudioContext';
 import MiniPlay from './MiniPlay'
 import PlayPageModal from './PlayPageModal';
@@ -89,6 +90,26 @@ const listPlay = ({ navigation, route }) => {
     };
     console.log('Selected Song:', selectedSong);
 
+=======
+import { useSong } from './SongContext';
+// import { AudioContext } from './AudioContext';
+// import MiniPlay from './MiniPlay'
+import PlayPageModal from './MiniPlayer';
+import { Modal, ScrollView } from 'react-native-web';
+const PlayList = ({route}) => {
+   const albums = route.params.item;
+   const playList =albums.songs;
+   const { setSelectedSong } = useSong();
+   function handleSongSelect(song) {
+     setSelectedSong(song);
+     console.log("handleSong id: " + song.id);
+   }
+   const playRandomSong = () => {
+        const randomIndex = Math.floor(Math.random() * playList.length);
+        const randomSong = playList[randomIndex];
+        setSelectedSong(randomSong);
+   };
+>>>>>>> Stashed changes:YouTubeMusic/components/PlayList.js
     return (
         <View style={styles.container}>
             <View style={styles.View1}>
