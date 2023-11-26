@@ -5,7 +5,6 @@ const SongContext = createContext();
 
 export const SongProvider = ({ children }) => {
   const [selectedSong, setSelectedSong] = useState(null);
-
   return (
     <SongContext.Provider value={{ selectedSong, setSelectedSong }}>
       {children}

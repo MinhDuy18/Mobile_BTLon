@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Image, StyleSheet, Modal } from 'react-na
 import { AntDesign } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import axios from 'axios';
+
 import Slider from '@react-native-community/slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSong } from './SongContext';
@@ -19,6 +20,7 @@ const PlayPageModal = ({ visible}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   // const [visibleModal, setVisibleModal] = useState(false);
   const { isPlaying,currentPosition,onPlaybackStatusUpdate, setCurrentPosition, setIsPlaying , duration, playedTime, remainingTime, setDuration, setPlayedTime, setRemainingTime} = useAudioPlayer();
+
   useEffect(() => {
     if (selectedSong) {
       setDuration(selectedSong.duration || 0); // Cập nhật duration từ selectedSong
@@ -102,6 +104,7 @@ const playSelectedSong = async (songURL) => {
       if (isPlaying) {
         await sound.pauseAsync();
         setIsPlaying(false);
+
       } else {
         await sound.playAsync();
         setIsPlaying(true);
@@ -124,9 +127,8 @@ const playSelectedSong = async (songURL) => {
       console.error('Error stopping audio: ', error);
     }
   };
-  console.log(selectedSong);
-  console.log(songPlaying);
-  console.log("2",selectedSong);
+
+
   if(!selectedSong) return null;
   const handlePlay = () => {
     playSelectedSong(selectedSong.mp3);
@@ -146,13 +148,11 @@ const playSelectedSong = async (songURL) => {
       }
     }
   };
-  
+
   const playNextSong = () => {
     const index = data.findIndex((item) => item.id === songPlaying.id);
     if (index < data.length - 1) {
       handleSongSelect(data[index + 1]);
-      console.log(data[index + 1]);
-      console.log("1" + selectedSong);
       stopAndUnload();
       handlePlay();
     } else {
@@ -317,7 +317,7 @@ const handleSliderComplete = async (value) => {
 
  
     
-    
+
       
   );
 };

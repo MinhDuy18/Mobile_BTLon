@@ -11,91 +11,33 @@ import { useSong } from './SongContext';
 // import MiniPlay from './MiniPlay'
 import PlayPageModal from './MiniPlayer';
 import { Modal, ScrollView } from 'react-native-web';
-const PlayList = ({ navigation, route }) => {
-    const [data, setData] = useState([]);
-    // const [selectedSong, setSelectedSong] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
-    const{setSelectedSong}=useSong();
-  const handleSongSelect = (song) => {
-    setSelectedSong(song);
-    console.log(song);
-  };
-    const openModalWithSong = (song) => {
-        setSelectedSong(song); // Lưu thông tin bài hát được chọn
-        setModalVisible(true); // Hiển thị Modal
-
-    };
-    // const audioContext = useContext(AudioContext);
-    // const { isPlaying, setIsPlaying, setAudioURL } = audioContext;
-    // useEffect(() => {
-    //     if (isPlaying) {
-    //         pause();
-    //     }
-    // }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/song');
-                setData(response.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    // const { currentSong } = route.params || {};
-
-    console.log(data);
-    // useEffect(() => {
-    //     // Kiểm tra nếu có bài hát được chọn, phát bài hát đó
-    //     if (selectedSong) {
-    //         navigation.navigate('playPage', {
-    //             name: selectedSong.name,
-    //             singer: selectedSong.singer,
-    //             image: selectedSong.image,
-    //             duration: selectedSong.duration,
-    //             url: selectedSong.mp3,
-    //             id: selectedSong.id,
-    //         });
-    //         // openModalWithSong(selectedSong);
-    //     }
-    //     // if (selectedSong) {
-
-    //     //     openModalWithSong(selectedSong);
-    //     //    console.log(selectedSong);
-    //     // }
-    // }, [selectedSong]);
-    const playRandomSong = () => {
-        if (data.length > 0) {
-            const randomIndex = Math.floor(Math.random() * data.length);
-            const randomSong = data[randomIndex];
-            // Chuyển hướng đến trang phát nhạc với bài hát ngẫu nhiên được chọn
-            setSelectedSong(randomSong);
-            console.log(randomSong);
-        }
-    };
+const PlayList = ({route}) => {
+   const albums = route.params.item;
+   const playList =albums.songs;
+   const { setSelectedSong } = useSong();
+   function handleSongSelect(song) {
+     setSelectedSong(song);
+     console.log("handleSong id: " + song.id);
+   }
 
     return (
         <ScrollView>
             <View style={styles.container}>
             <View style={styles.View1}>
                 <View style={styles.Img_Style}>
-                    <Image style={styles.img_name_list} source={require('../img/Song1.png')} ></Image>
-                    <Image style={styles.img_name_list} source={require('../img/Song1.png')} ></Image>
-                    <Image style={styles.img_name_list} source={require('../img/Song1.png')} ></Image>
-                    <Image style={styles.img_name_list} source={require('../img/Song1.png')} ></Image>
+                    <Image style={styles.img_name_list} source={playList[0].image} ></Image>
+                    <Image style={styles.img_name_list} source={playList[1].image} ></Image>
+                    <Image style={styles.img_name_list} source={playList[2].image} ></Image>
+                    <Image style={styles.img_name_list} source={playList[3].image} ></Image>
                 </View>
                 <View style={styles.Text_Style}>
-                    <Text style={styles.nameList}>Việt Suy</Text>
+                    <Text style={styles.nameList}>{albums.title}</Text>
                     <Text style={styles.subTextlist}>Danh sách phát</Text>
                     <Text style={styles.subTextlist} >30 N lượt xem - 28 bản nhạc</Text>
                 </View>
             </View>
             <View style={styles.buttom_Style}>
-                <TouchableOpacity onPress={playRandomSong}>
+                <TouchableOpacity>
                     <View style={styles.butomNext}>
                         <AntDesign name="swap" size={24} color="#000" />
                         <Text style={styles.text_bottomNext}>Trộn bài</Text>
@@ -108,7 +50,7 @@ const PlayList = ({ navigation, route }) => {
                 <Ionicons name="ellipsis-vertical-sharp" size={24} color="#fff" />
             </View>
             <View>
-                <FlatList data={data}
+                <FlatList data={playList}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={() => {

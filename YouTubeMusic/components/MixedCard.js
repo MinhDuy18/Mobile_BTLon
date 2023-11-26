@@ -1,27 +1,60 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  FlatList,
+} from "react-native";
 import React from "react";
-
-const MixedCard = ({item}) => {
+import { useNavigation } from "@react-navigation/native";
+const MixedCard = ({ items,setPlayList,setVisible}) => {
+  const navigaton = useNavigation();
   return (
     <View>
-      <TouchableOpacity
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginHorizontal: 5,
-          marginVertical: 10,
-        }}
-      >
-        <Image
-          source={require(`../img/${item.img}`)}
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text
           style={{
-            width: 177,
-            height: 177,
-            resizeMode: "contain",
-            borderRadius: 10,
+            fontSize: 24,
+            fontStyle: "roboto",
+            color: "white",
+            fontWeight: "bold",
+            marginLeft: 16,
           }}
-        ></Image>
-      </TouchableOpacity>
+        >
+          Mixed for you
+        </Text>
+      </View>
+      <FlatList
+        horizontal
+        numColumns={1}
+        data={items}
+        renderItem={({item}) => (
+          <TouchableOpacity
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              marginHorizontal: 5,
+              marginVertical: 10,
+            }}
+            onPress={() => {
+              navigaton.navigate("PlayList", { item: item });
+
+            }}
+          >
+            <Image
+              source={item.image}
+              style={{
+                width: 177,
+                height: 177,
+                resizeMode: "contain",
+                borderRadius: 10,
+              }}
+            ></Image>
+            <Text style={{fontSize:20,color:'white'}}>{item.title}</Text>
+          </TouchableOpacity>
+        )}
+      ></FlatList>
     </View>
   );
 };
