@@ -1,0 +1,176 @@
+
+{
+  "song": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "name": "Ngày mai người ta lấy chồng",
+      "duration": "6:02",
+      "singer": "Thành Đạt",
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/cover/f/9/3/9/f9390ab7a26adbe59739fe2ba9470ee1.jpg",
+      "mp3": "https://res.cloudinary.com/djkmqg6tr/video/upload/v1700206941/NG%C3%80Y_MAI_NG%C6%AF%E1%BB%9CI_TA_L%E1%BA%A4Y_CH%E1%BB%92NG_-_TH%C3%80NH_%C4%90%E1%BA%A0T_x_%C4%90%C3%94NG_THI%C3%8AN_%C4%90%E1%BB%A8C___OFFICIAL_MV___Ng%C3%A0y_H%C3%B4m_%E1%BA%A4y_Em_%C4%90i_Trong_M%C6%B0a_1_kjq78y.mp4",
+      "genres": ["Energy", "Sad", "Romantic", "Sleep"]
+    },
+    {
+      "id": 2,
+      "title": "json-server",
+      "name": "Đông kiếm em",
+      "duration": "4:07",
+      "singer": "Vũ",
+      "image": "https://s.mxmcdn.net/images-storage/albums4/7/2/0/0/8/3/38380027_350_350.jpg",
+      "mp3": "https://res.cloudinary.com/djkmqg6tr/video/upload/v1700304864/DongKiemEmGuitarVersion-VuHienRau-5840952_i1dyar.mp3",
+
+      "genres": ["Relax", "Happy", "Exercise"]
+    },
+    {
+      "id": 3,
+      "title": "json-server",
+      "name": "Răng Khôn",
+      "duration": "3:52",
+      "singer": "Phí Phương Anh, RIN9",
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/cover/b/7/b/5/b7b5b99e4aa374702ce8ee64858a9bbb.jpg",
+      "mp3": "https://res.cloudinary.com/djkmqg6tr/video/upload/v1700303532/RangKhon-PhiPhuongAnhTheFaceRIN9-7006388_d8f3pd.mp3",
+      "genres": ["Relax", "Party", "Concentrate"]
+    },
+    {
+      "id": 4,
+      "title": "json-server",
+      "name": "Sau chia tay ai cũng khác",
+      "duration": "6:02",
+      "singer": "T.R.I",
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/avatars/0/2/4/d/024dcbb0ea20277514f35dc87e26bb3e.jpg",
+      "mp3": "https://res.cloudinary.com/djkmqg6tr/video/upload/v1700303532/SauChiaTayAiCungKhac-TRI-6297371_uz340s.mp3",
+      "genres": ["Relax", "Happy", "Concentrate", "Sleep"]
+    },
+    {
+      "id": 5,
+      "title": "json-server",
+      "name": "Rồi tay sẽ ngắm pháo hoa cùng nhau",
+      "duration": "4:37",
+      "singer": "O.Lew",
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/cover/3/7/8/3/3783e133aa260cb37808658b84a5a9e1.jpg",
+      "mp3": "https://res.cloudinary.com/djkmqg6tr/video/upload/v1700330269/RoiTaSeNgamPhaoHoaCungNhau-OlewVietNam-8485329_i8j76y.mp3",
+      "genres": ["Exercise", "Sad", "Sleep"]
+    },
+    {
+      "id": 6,
+      "title": "json-server",
+      "name": "Bưỡc qua mùa cô đơn",
+      "duration": "5:36",
+      "singer": "Vũ",
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/cover/d/1/9/2/d192495fa46802f96c1d6cccf0326de3.jpg",
+      "mp3": "https://res.cloudinary.com/djkmqg6tr/video/upload/v1700304847/BuocQuaMuaCoDon-VA-7985736_isk3td.mp3",
+      "genres": ["Relax", "Party", "Sad", "Sleep"]
+    },
+    {
+      "id": 7,
+      "title": "json-server",
+      "name": "Khi em lớn",
+      "duration": "3:48",
+      "singer": "Orange, Hoàng Dũng",
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/cover/c/4/3/a/c43a3f7cc98ee9c62401edb8fb999b74.jpg",
+      "mp3": "https://res.cloudinary.com/djkmqg6tr/video/upload/v1700304876/Upgrade-A-11250963_jkdln4.mp3",
+      "genres": ["Happy", "Sad", "Romantic", "Sleep"]
+    },
+    {
+      "id": 8,
+      "title": "json-server",
+      "name": "Ta là của nhau",
+      "duration": "2:59",
+      "singer": "Đông Nhi, Ông Cao Thắng",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767193/YTMusic/pic/ubo5wsnk3yafcef7xtcn.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767138/YTMusic/song/mokiwiaxftyrp0sgq51m.mp3",
+      "genres": ["Relax", "Happy", "Exercise", "Sleep"]
+    },
+    {
+      "id": 9,
+      "title": "json-server",
+      "name": "Nơi tình yêu bắt đầu",
+      "duration": "4:36",
+      "singer": "Bùi Anh Tuấn",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767193/YTMusic/pic/jspjb4omd3wcbnkomwoq.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767138/YTMusic/song/pmqhjbzf9qpjiynczdhz.mp3",
+      "genres": ["Happy", "Exercise", "Party"]
+    },
+    {
+      "id": 10,
+      "title": "json-server",
+      "name": "Sau tất cả",
+      "duration": "3:54",
+      "singer": "Erik ST.319",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767193/YTMusic/pic/wnraysqe3eicqoxuddl5.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767138/YTMusic/song/evy379njnx84h4nbcxnc.mp3",
+      "genres": ["Relax", "Romantic", "Sleep"]
+    },
+    {
+      "id": 11,
+      "title": "json-server",
+      "name": "Lệ đá",
+      "duration": "5:19",
+      "singer": "Bằng Kiều",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767192/YTMusic/pic/w34zr3s0ma1wsqqf5prm.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767138/YTMusic/song/fd2znrashvxjv5qyvy7f.mp3",
+      "genres": ["Concentrate", "Sad", "Romantic"]
+    },
+    {
+      "id": 12,
+      "title": "json-server",
+      "name": "Đừng khóc",
+      "duration": "5:08",
+      "singer": "Chi Dân",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767192/YTMusic/pic/kg8fomon7kluu7hyiwkr.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767138/YTMusic/song/wcos4ksjt62d3ubt6qzk.mp3",
+      "genres": ["Happy", "Concentrate", "Sleep"]
+    },
+    {
+      "id": 13,
+      "title": "json-server",
+      "name": "Hơn cả yêu",
+      "duration": "3:33",
+      "singer": "Đức Phúc",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767192/YTMusic/pic/pw6kx0mgaywqdrefw8hu.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767137/YTMusic/song/zkytwcxisfkzl8ennuyi.mp3",
+      "genres": ["Relax", "Romantic", "Sleep"]
+    },
+    {
+      "id": 14,
+      "title": "json-server",
+      "name": "Như lần đầu",
+      "duration": "4:42",
+      "singer": "Nguyên Hà",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767192/YTMusic/pic/ipffslxdt2ryspn6mfao.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767136/YTMusic/song/h4zndddcvvrg1votup9l.mp3",
+      "genres": ["Relax", "Party", "Sleep"]
+    },
+    {
+      "id": 15,
+      "title": "json-server",
+      "name": "Em ngủ chưa",
+      "duration": "5:33",
+      "singer": "Trịnh Thăng Bình",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767192/YTMusic/pic/ukwedcmy88tbccnekrq6.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767136/YTMusic/song/dlomu4jaejzsfyxrixbt.mp3",
+      "genres": ["Concentrate", "Sad", "Romantic", "Sleep"]
+    },
+    {
+      "id": 16,
+      "title": "json-server",
+      "name": "Ánh sao và bầu trời",
+      "duration": "4:20",
+      "singer": "T.R.I",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767192/YTMusic/pic/oiqhqrcnbcxotz1m9f6i.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767136/YTMusic/song/wzba5nogjpie0praowgm.mp3",
+      "genres": ["Romantic", "Sleep"]
+    },
+    {
+      "id": 17,
+      "title": "json-server",
+      "name": "Đừng để nước mắt rơi",
+      "duration": "3:25",
+      "singer": "Obito",
+      "image": "https://res.cloudinary.com/dp8neezzi/image/upload/v1700767192/YTMusic/pic/rd3ryseykqyb6wmp47zm.jpg",
+      "mp3": "https://res.cloudinary.com/dp8neezzi/video/upload/v1700767135/YTMusic/song/ho4uqkmfdpj0jrgvydkt.mp3",
+      "genres": ["Happy", "Sleep"]
+    }
+  ]
+}
