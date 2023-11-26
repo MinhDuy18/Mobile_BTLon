@@ -102,7 +102,6 @@ export default function HomeScreen() {
       </ScrollView>
       {/* magnify search */}
       <MagnifyModal visible={visibleModalSearch} onClose={() => setVisibleModalSearch(false)} />
-      <PlayList visible={visibleModalPlaylist} onClose={() => setVisibleModalPlaylist(false)} playList={playList} setSong={handleSongSelect}/>
     </LinearGradient>
   );
 }

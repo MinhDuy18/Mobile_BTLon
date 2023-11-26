@@ -1,6 +1,7 @@
 import HomeScreen from "../screens/HomeScreen";
 import ExploreScreen from "../screens/ExploreScreen";
 import LibraryScreen from "../screens/LibraryScreen";
+import PlayList from "./PlayList";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Foundation } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -20,7 +21,7 @@ const BottomTabOptions = {
 };
 export default function BottomTab() {
   return (
-    <Tab.Navigator screenOptions={BottomTabOptions}>
+    <Tab.Navigator screenOptions={BottomTabOptions} initialRouteName="HomeScreen">
       <Tab.Screen
         name={"Home"}
         component={HomeScreen}
@@ -61,11 +62,13 @@ export default function BottomTab() {
                 name="library-music"
                 size={24}
                 color={focused ? "white" : "grey"}
+                
               />
             </View>
           ),
         }}
       ></Tab.Screen>
+      <Tab.Screen name="PlayList" component={PlayList} options={{tabBarButton:()=>null}}></Tab.Screen>
     </Tab.Navigator>
   );
 }

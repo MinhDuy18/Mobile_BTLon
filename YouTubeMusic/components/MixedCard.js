@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-// const navigaton = useNavigation();
 const MixedCard = ({ items,setPlayList,setVisible}) => {
+  const navigaton = useNavigation();
   return (
     <View>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -38,8 +38,7 @@ const MixedCard = ({ items,setPlayList,setVisible}) => {
               marginVertical: 10,
             }}
             onPress={() => {
-              setPlayList(item);
-              setVisible(true);
+              navigaton.navigate("PlayList", { item: item });
 
             }}
           >
