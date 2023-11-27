@@ -2,6 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image} from 'react-native';
 import { useAccount } from '../components/AccountContext';
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -33,14 +35,19 @@ const LoginScreen = () => {
       <View style={{position:'absolute',top:80 ,width:'100%'}}>
         <Image source={require('../img/YMusicLogo.svg')} style={{witdh:120,height:60, resizeMode:'contain'}}></Image>
       </View>
-      <TextInput
-        placeholder="Username"
-        placeholderTextColor={'gray'}
-        value={email}
-        onChangeText={text => setEmail(text)}
-        style={{ borderWidth: 1, borderColor: 'gray',borderRadius:5, width: 300, marginVertical: 10, padding: 5,color:'white' }}
+      <View style = {{flexDirection: "row", justifyContent:"space-between", alignItems: "center"}}>
+          <AntDesign name="user" size={30} color="#fff" style = {{marginRight:10}}/>
+          <TextInput
+            placeholder="Username"
+            placeholderTextColor={'gray'}
+            value={email}
+            onChangeText={text => setEmail(text)}
+            style={{ borderWidth: 1, borderColor: 'gray',borderRadius:5, width: 300, marginVertical: 10, padding: 5,color:'white' }}
       />
-      <TextInput
+      </View>
+      <View style = {{flexDirection: "row", justifyContent:"space-between", alignItems: "center", }}>
+         <MaterialIcons name="lock" size={30} color="#fff" style = {{marginRight:10}} />
+         <TextInput
         placeholder="Password"
         placeholderTextColor={'gray'}
         value={password}
@@ -48,6 +55,8 @@ const LoginScreen = () => {
         secureTextEntry={true}
         style={{ borderWidth: 1, borderColor: 'gray',borderRadius:5 ,width: 300, marginVertical: 10, padding: 5 ,color:'white'}}
       />
+      </View>
+      
       <Button title="Đăng nhập" onPress={handleLogin} />
     </View>
   );

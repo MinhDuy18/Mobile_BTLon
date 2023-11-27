@@ -248,7 +248,7 @@ const handleRetWeet = async () => {
            <AntDesign name="up" size={24} color="black" />
       </TouchableOpacity>
       <Modal visible={isExpanded} transparent animationType='slide'>
-        <TouchableOpacity style={styles.expandedContainer}>
+        <View style={styles.expandedContainer}>
         <TouchableOpacity style = {{width:60, height:60}} onPress={handleDownButtonPress}>
              <AntDesign name="down" size={30} color="black" />
         </TouchableOpacity>
@@ -301,7 +301,7 @@ const handleRetWeet = async () => {
                 <AntDesign name="retweet" size={35} color="black" />
                   </TouchableOpacity>
             </View>
-        </TouchableOpacity>
+        </View>
       </Modal>
       {/* Các icon hoặc control nhỏ như play/pause có thể được thêm vào đây */}
     </TouchableOpacity>
